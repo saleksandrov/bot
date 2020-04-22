@@ -1,0 +1,23 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: bot-base
+  main:
+    allow-bean-definition-overriding: true
+
+logging:
+  path: ./logs
+  level:
+    ru.asv.bmd: WARN
+    org.springframework: WARN
+
+#management:
+#  endpoint:
+#    logfile:
+#      external_file: ./logs/bmd_base.log
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
