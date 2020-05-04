@@ -1,0 +1,8 @@
+POST http://localhost:8082/bot/sendMessage
+Accept: application/json
+Cache-Control: no-cache
+Content-Type: application/json
+
+{"message": "test"}
+
+###
