@@ -1,0 +1,1 @@
+web: java -jar bot-base/build/libs/bot-base-1.0.0.jar
