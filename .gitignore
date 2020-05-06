@@ -22,4 +22,4 @@ hs_err_pid*
 build
 .DS_Store
 
-bot-base\build
+/bot-base/build/
