@@ -11,7 +11,7 @@ apply plugin: 'io.spring.dependency-management'
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    //implementation 'de.codecentric:spring-boot-admin-starter-client:2.1.6'
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

@@ -3,6 +3,32 @@ Accept: application/json
 Cache-Control: no-cache
 Content-Type: application/json
 
-{"message": "test"}
+{
+  "test": "value",
+  "body": {
+    "some_f": "some_v",
+    "some_c": {
+      "some_f": "some_v"
+    },
+    "message": {
+      "message_id": "[INTEGER]",
+      "from": {
+        "id": "[INTEGER]",
+        "is_bot": false,
+        "first_name": "Name",
+        "last_name": "LastName",
+        "language_code": "ru"
+      },
+      "chat": {
+        "id": "123",
+        "first_name": "Name",
+        "last_name": "LastName",
+        "type": "private"
+      },
+      "date": "[INTEGER]",
+      "text": "TEXT It's worked"
+    }
+  }
+}
 
 ###
