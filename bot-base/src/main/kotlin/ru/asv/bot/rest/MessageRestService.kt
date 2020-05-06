@@ -17,19 +17,20 @@ import java.lang.reflect.Type
 class MessageRestService {
 
     private val logger = LoggerFactory.getLogger(MessageRestService::class.java)
+    private val rqLogger = LoggerFactory.getLogger("requests")
 
     @PostMapping("/sendMessage")
     fun processMessage(@RequestBody request: String) : Mono<ResponseEntity<Any>> {
-        logger.info("Received request ${request}")
+        rqLogger.info("Received request ${request}")
 
         return try {
             val botRequest = parseRequest(request)
-            logger.info("Deserialized request JSON to ${botRequest!!::class.simpleName} value: $botRequest")
+            rqLogger.info("Extracted request data: ${botRequest!!}")
             val botResponse = BotResponse("sendMessage", botRequest.chatId, botRequest.text)
-            Mono.just(ResponseEntity.ok(botResponse))
+            Mono.just(ResponseEntity.ok(botResponse as Any))
         } catch (ex: Exception) {
             logger.error("Error during input request handling", ex)
-            Mono.just(ResponseEntity.badRequest().body("Error"))
+            Mono.just(ResponseEntity.badRequest().body("Error" as Any))
         }
 
     }
