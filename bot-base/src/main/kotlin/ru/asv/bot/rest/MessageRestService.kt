@@ -13,7 +13,7 @@ import ru.asv.bot.model.BotResponse
 import java.lang.reflect.Type
 
 @RestController
-@RequestMapping("/bot")
+@RequestMapping("/api/v1/bot")
 class MessageRestService {
 
     private val logger = LoggerFactory.getLogger(MessageRestService::class.java)
@@ -44,7 +44,7 @@ class MessageRestService {
     }
 
     private fun jsonDeserializer(): JsonDeserializer<BotRequest> {
-        return JsonDeserializer<BotRequest> { jsonElement: JsonElement, type: Type, jsonDeserializationContext: JsonDeserializationContext ->
+        return JsonDeserializer<BotRequest> { jsonElement: JsonElement, _: Type, _: JsonDeserializationContext ->
             val jsonObject: JsonObject = jsonElement.getAsJsonObject()
 
             val messageObject = jsonObject

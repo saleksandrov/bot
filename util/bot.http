@@ -1,4 +1,4 @@
-POST http://localhost:8082/bot/sendMessage
+POST http://localhost:8082/api/v1/bot/sendMessage
 Accept: application/json
 Cache-Control: no-cache
 Content-Type: application/json
