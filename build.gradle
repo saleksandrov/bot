@@ -7,7 +7,7 @@ repositories {
     mavenCentral()
 }
 
-task stage(dependsOn: ['build', 'clean'])
+task stage(dependsOn: ['clean', 'build'])
 build.mustRunAfter clean
 
 subprojects {
@@ -19,6 +19,9 @@ subprojects {
     apply plugin: 'kotlin'
 
     sourceCompatibility = 1.8
+
+    task stage(dependsOn: ['clean', 'build'])
+    build.mustRunAfter clean
 
     repositories {
         mavenCentral()
