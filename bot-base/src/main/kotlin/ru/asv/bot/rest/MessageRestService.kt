@@ -2,6 +2,7 @@ package ru.asv.bot.rest
 
 import com.google.gson.*
 import org.slf4j.LoggerFactory
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -12,25 +13,26 @@ import ru.asv.bot.model.BotRequest
 import ru.asv.bot.model.BotResponse
 import java.lang.reflect.Type
 
+@Suppress("UNCHECKED_CAST")
 @RestController
-@RequestMapping("/api/v1/bot")
+@RequestMapping("/api/v1/bot", produces = [MediaType.APPLICATION_JSON_VALUE])
 class MessageRestService {
 
-    private val logger = LoggerFactory.getLogger(MessageRestService::class.java)
-    private val rqLogger = LoggerFactory.getLogger("requests")
+    private val log = LoggerFactory.getLogger(MessageRestService::class.java)
+    private val rqLog = LoggerFactory.getLogger("requests")
 
     @PostMapping("/sendMessage")
     fun processMessage(@RequestBody request: String) : Mono<ResponseEntity<Any>> {
-        rqLogger.info("Received request ${request}")
+        rqLog.info("Received request ${request}")
 
         return try {
             val botRequest = parseRequest(request)
-            rqLogger.info("Extracted request data: ${botRequest!!}")
+            rqLog.info("Extracted request data: ${botRequest!!}")
             val botResponse = BotResponse("sendMessage", botRequest.chatId, botRequest.text)
-            Mono.just(ResponseEntity.ok(botResponse as Any))
+            Mono.just(ResponseEntity.ok(botResponse) as ResponseEntity<Any>)
         } catch (ex: Exception) {
-            logger.error("Error during input request handling", ex)
-            Mono.just(ResponseEntity.badRequest().body("Error" as Any))
+            log.error("Error during input request handling", ex)
+            Mono.just(ResponseEntity.badRequest().body("Error") as ResponseEntity<Any>)
         }
 
     }
@@ -48,7 +50,6 @@ class MessageRestService {
             val jsonObject: JsonObject = jsonElement.getAsJsonObject()
 
             val messageObject = jsonObject
-                .getAsJsonObject("body")
                 .getAsJsonObject("message")
             val chatObject = messageObject
                 .getAsJsonObject("chat")

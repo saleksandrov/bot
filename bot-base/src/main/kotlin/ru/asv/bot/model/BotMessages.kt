@@ -1,8 +1,10 @@
 package ru.asv.bot.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
+
 data class BotResponse(
     val method: String,
-    val chatId: Int,
+    @JsonProperty("chat_id") val chatId: Int,
     val text: String
 )
 
