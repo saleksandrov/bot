@@ -5,11 +5,7 @@ Content-Type: application/json
 
 {
   "test": "value",
-  "body": {
-    "some_f": "some_v",
-    "some_c": {
-      "some_f": "some_v"
-    },
+
     "message": {
       "message_id": "[INTEGER]",
       "from": {
@@ -28,7 +24,7 @@ Content-Type: application/json
       "date": "[INTEGER]",
       "text": "TEXT It's worked"
     }
-  }
+
 }
 
 ###
