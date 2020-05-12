@@ -31,18 +31,18 @@ class MessageRestService {
             rqLog.info("Extracted request data: ${botRequest!!}")
 
             val question = botRequest.text.toLowerCase()
-            var answer = question
 
             if (question.startsWith("какая погода в лугах")
                 || question.startsWith("какая погода в бунинских лугах") ) {
-                val weatherInfo = WeatherAdapter().getWeather()
-                answer = """
-                         Температура ${weatherInfo.fact.temp}, 
-                         ощущается как ${weatherInfo.fact.feels_like}, 
-                         скорость ветра ${weatherInfo.fact.wind_speed}""".trimIndent()
+                return WeatherAdapter().getWeather().flatMap {
+                    val answer = """
+                         В Лугах сейчас: Температура ${it.fact.temp}, ощущается как ${it.fact.feels_like}, скорость ветра ${it.fact.wind_speed}""".trimIndent()
+                    val botResponse = BotResponse("sendMessage", botRequest.chatId, answer)
+                    Mono.just(ResponseEntity.ok(botResponse) as ResponseEntity<Any>)
                 }
+            }
 
-            val botResponse = BotResponse("sendMessage", botRequest.chatId, answer)
+            val botResponse = BotResponse("sendMessage", botRequest.chatId, botRequest.text)
             Mono.just(ResponseEntity.ok(botResponse) as ResponseEntity<Any>)
         } catch (ex: Exception) {
             log.error("Error during input request handling", ex)

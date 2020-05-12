@@ -2,8 +2,8 @@ package ru.asv.bot.adapter
 
 import org.slf4j.LoggerFactory
 import org.springframework.web.reactive.function.client.WebClient
-import java.time.LocalDateTime
-import java.time.ZoneId
+import reactor.core.publisher.Mono
+import java.time.Duration
 import java.util.concurrent.locks.ReentrantLock
 
 class WeatherAdapter {
@@ -14,9 +14,9 @@ class WeatherAdapter {
         private val cache = Cache()
     }
 
-    fun getWeather(): WeatherInfo {
-        return cache.getOrSet {
-            WebClient.create("https://api.weather.yandex.ru")
+    fun getWeather(): Mono<WeatherInfo> {
+
+        return WebClient.create("https://api.weather.yandex.ru")
                 .get()
                 .uri(
                     "/v1/forecast?lat={lat}&lon={lon}&lang=ru_RU&limit=1&hours=false&extra=false",
@@ -25,9 +25,8 @@ class WeatherAdapter {
                 )
                 .header("X-Yandex-API-Key", "4983ebca-06b4-46c8-827a-b51649b71c36")
                 .retrieve()
-                .bodyToMono(WeatherInfo::class.java)
-                .block()!!
-        }
+                .bodyToMono(WeatherInfo::class.java).cache(Duration.ofMinutes(30))
+
     }
 
 }
@@ -52,11 +51,13 @@ class Cache {
     private var lastUpdateTime: Long = 0
     private lateinit var weatherInfo: WeatherInfo
 
-    fun getOrSet(calculate: () -> WeatherInfo): WeatherInfo {
+    fun getOrSet(calculate: () -> Mono<WeatherInfo>): Mono<WeatherInfo> {
+        TODO("consider to remove")
+        /*
         val currentTime = LocalDateTime.now().atZone(ZoneId.of("Europe/Moscow")).toInstant().toEpochMilli()
         if ((currentTime - lastUpdateTime) < cacheTimeMls) {
             log.info("Get Weather from cache")
-            return weatherInfo
+            return Mono.just(weatherInfo)
         }
         try {
             lock.lock()
@@ -66,7 +67,7 @@ class Cache {
             return weatherInfo
         } finally {
             lock.unlock()
-        }
+        }*/
     }
 
 }
