@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Mono
+import ru.asv.bot.adapter.WeatherAdapter
 import ru.asv.bot.model.BotRequest
 import ru.asv.bot.model.BotResponse
 import java.lang.reflect.Type
@@ -28,7 +29,20 @@ class MessageRestService {
         return try {
             val botRequest = parseRequest(request)
             rqLog.info("Extracted request data: ${botRequest!!}")
-            val botResponse = BotResponse("sendMessage", botRequest.chatId, botRequest.text)
+
+            val question = botRequest.text.toLowerCase()
+            var answer = question
+
+            if (question.startsWith("какая погода в лугах")
+                || question.startsWith("какая погода в бунинских лугах") ) {
+                val weatherInfo = WeatherAdapter().getWeather()
+                answer = """
+                         Температура ${weatherInfo.fact.temp}, 
+                         ощущается как ${weatherInfo.fact.feels_like}, 
+                         скорость ветра ${weatherInfo.fact.wind_speed}""".trimIndent()
+                }
+
+            val botResponse = BotResponse("sendMessage", botRequest.chatId, answer)
             Mono.just(ResponseEntity.ok(botResponse) as ResponseEntity<Any>)
         } catch (ex: Exception) {
             log.error("Error during input request handling", ex)
