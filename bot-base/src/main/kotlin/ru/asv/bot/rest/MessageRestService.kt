@@ -2,6 +2,7 @@ package ru.asv.bot.rest
 
 import com.google.gson.*
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -17,7 +18,7 @@ import java.lang.reflect.Type
 @Suppress("UNCHECKED_CAST")
 @RestController
 @RequestMapping("/api/v1/bot", produces = [MediaType.APPLICATION_JSON_VALUE])
-class MessageRestService {
+class MessageRestService @Autowired constructor(private val weatherAdapter: WeatherAdapter) {
 
     private val log = LoggerFactory.getLogger(MessageRestService::class.java)
     private val rqLog = LoggerFactory.getLogger("requests")
@@ -34,7 +35,7 @@ class MessageRestService {
 
             if (question.startsWith("какая погода в лугах")
                 || question.startsWith("какая погода в бунинских лугах") ) {
-                return WeatherAdapter().getWeather().flatMap {
+                return weatherAdapter.getWeather().flatMap {
                     val answer = """
                          В Лугах сейчас: Температура ${it.fact.temp}, ощущается как ${it.fact.feels_like}, скорость ветра ${it.fact.wind_speed}""".trimIndent()
                     val botResponse = BotResponse("sendMessage", botRequest.chatId, answer)

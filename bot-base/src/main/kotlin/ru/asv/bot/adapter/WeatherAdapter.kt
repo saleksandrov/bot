@@ -1,11 +1,14 @@
 package ru.asv.bot.adapter
 
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
 import java.time.Duration
 
-class WeatherAdapter {
+@Component
+class WeatherAdapter(@Value("\${bot-base.weatherToken}") private val weatherToken: String) {
 
     private val log = LoggerFactory.getLogger(WeatherAdapter::class.java)
 
@@ -17,7 +20,7 @@ class WeatherAdapter {
                     "55.542066",
                     "37.483933"
                 )
-                .header("X-Yandex-API-Key", "4983ebca-06b4-46c8-827a-b51649b71c36")
+                .header("X-Yandex-API-Key", weatherToken)
                 .retrieve()
                 .bodyToMono(WeatherInfo::class.java).cache(Duration.ofMinutes(30))
 

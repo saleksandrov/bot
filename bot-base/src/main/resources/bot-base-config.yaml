@@ -13,6 +13,9 @@ logging:
     ru.asv.bot: WARN
     org.springframework: WARN
 
+bot-base:
+  weatherToken: ${WEATHER_TOKEN}
+
 #management:
 #  endpoint:
 #    logfile:
