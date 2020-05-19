@@ -13,12 +13,20 @@ import reactor.core.publisher.Mono
 import ru.asv.bot.adapter.WeatherAdapter
 import ru.asv.bot.model.BotRequest
 import ru.asv.bot.model.BotResponse
+import ru.asv.bot.rule.RuleEngine
+import ru.asv.bot.text.SentenceProcessor
+import ru.asv.bot.text.WordProcessor
 import java.lang.reflect.Type
 
 @Suppress("UNCHECKED_CAST")
 @RestController
 @RequestMapping("/api/v1/bot", produces = [MediaType.APPLICATION_JSON_VALUE])
-class MessageRestService @Autowired constructor(private val weatherAdapter: WeatherAdapter) {
+class MessageRestService @Autowired constructor(
+    private val weatherAdapter: WeatherAdapter,
+    private val sp: SentenceProcessor,
+    private val botRules: RuleEngine,
+    private val wp: WordProcessor
+    ) {
 
     private val log = LoggerFactory.getLogger(MessageRestService::class.java)
     private val rqLog = LoggerFactory.getLogger("requests")
@@ -31,21 +39,11 @@ class MessageRestService @Autowired constructor(private val weatherAdapter: Weat
             val botRequest = parseRequest(request)
             rqLog.info("Extracted request data: ${botRequest!!}")
 
-            val question = botRequest.text.toLowerCase()
-
-            if (question.startsWith("какая погода в лугах")
-                || question.startsWith("какая погода в бунинских лугах") ) {
-                return weatherAdapter.getWeather().flatMap {
-                    val answer = """
-                         В Лугах сейчас: Температура ${it.fact.temp}, ощущается как ${it.fact.feels_like}, скорость ветра ${it.fact.wind_speed}""".trimIndent()
-
-                    val botResponse = BotResponse("sendMessage", botRequest.chatId, answer)
+            wp.determineAnswer(sp.splitToWords(botRequest.text), botRules)
+                .flatMap {
+                    val botResponse = BotResponse("sendMessage", botRequest.chatId, it)
                     Mono.just(ResponseEntity.ok(botResponse) as ResponseEntity<Any>)
                 }
-            }
-
-            val botResponse = BotResponse("sendMessage", botRequest.chatId, botRequest.text)
-            Mono.just(ResponseEntity.ok(botResponse) as ResponseEntity<Any>)
         } catch (ex: Exception) {
             log.error("Error during input request handling", ex)
             Mono.just(ResponseEntity.badRequest().body("Error") as ResponseEntity<Any>)

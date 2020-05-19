@@ -1,5 +1,6 @@
 package ru.asv.bot.text
 
+import org.springframework.stereotype.Component
 import org.springframework.util.ResourceUtils
 
 interface SentenceProcessor {
@@ -7,6 +8,7 @@ interface SentenceProcessor {
     fun splitToWords(sentence: String): List<String>
 }
 
+@Component
 class NaiveSentenceProcessor: SentenceProcessor {
 
     private val patternRegexp = Regex("[!@#$%^&*()?\"'><.,{}\\[\\]]")

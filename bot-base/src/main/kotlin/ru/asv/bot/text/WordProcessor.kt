@@ -1,14 +1,17 @@
 package ru.asv.bot.text
 
+import org.springframework.stereotype.Component
+import reactor.core.publisher.Mono
 import ru.asv.bot.rule.RuleEngine
 
 interface WordProcessor {
-    fun determineAnswer(questionWords: List<String>, ruleEngine: RuleEngine): String
+    fun determineAnswer(questionWords: List<String>, ruleEngine: RuleEngine): Mono<String>
 }
 
+@Component
 class NaiveWordProcessor : WordProcessor {
 
-    override fun determineAnswer(questionWords: List<String>, ruleEngine: RuleEngine): String {
+    override fun determineAnswer(questionWords: List<String>, ruleEngine: RuleEngine): Mono<String> {
         var answer = ruleEngine.defaultAnswer()
         ruleEngine.answers.forEach answer@{ patternWordsList, v ->
             var errors = 0

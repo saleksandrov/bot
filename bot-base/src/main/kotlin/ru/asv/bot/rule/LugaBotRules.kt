@@ -1,13 +1,16 @@
 package ru.asv.bot.rule
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import reactor.core.publisher.Mono
+import ru.asv.bot.adapter.WeatherAdapter
 import ru.asv.bot.text.OptionalWord
 import ru.asv.bot.text.RegexpWord
 import ru.asv.bot.text.RequiredWord
 import ru.asv.bot.text.Word
 
 @Component
-class LugaBotRules : RuleEngine() {
+class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAdapter) : RuleEngine() {
 
     init {
         botRule {
@@ -30,7 +33,11 @@ class LugaBotRules : RuleEngine() {
                 }
 
                 thenAnswer {
-                    "хорошая погода"
+                    weatherAdapter.getWeather().flatMap {
+                        val answer = """
+                         В Лугах сейчас: Температура ${it.fact.temp}, ощущается как ${it.fact.feels_like}, скорость ветра ${it.fact.wind_speed}""".trimIndent()
+                        Mono.just(answer)
+                    }
                 }
             }
 
@@ -43,7 +50,7 @@ class LugaBotRules : RuleEngine() {
                 }
 
                 thenAnswer {
-                    "Телефон УК +7 (800) 505-89-89"
+                    Mono.just("Телефон УК +7 (800) 505-89-89")
                 }
             }
 

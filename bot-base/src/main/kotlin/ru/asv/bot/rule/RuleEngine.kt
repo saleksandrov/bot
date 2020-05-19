@@ -1,30 +1,31 @@
 package ru.asv.bot.rule
 
+import reactor.core.publisher.Mono
 import ru.asv.bot.text.Word
 
 
 open class RuleEngine {
 
-    val answers = mutableMapOf<List<Word>, () -> String>()
+    val answers = mutableMapOf<List<Word>, () -> Mono<String>>()
 
     private val defaultAnswers = mutableListOf<String>()
 
-    fun botRule(init: () -> Unit) {
+    protected fun botRule(init: () -> Unit) {
         init()
     }
 
-    fun answer(init: AnswerContext.() -> Unit) {
+    protected fun answer(init: AnswerContext.() -> Unit) {
         val ac = AnswerContext()
         ac.init()
         answers[ac.patterns] = ac.answerFun
     }
 
-    fun defaultAnswers(init: () -> List<String>) {
+    protected fun defaultAnswers(init: () -> List<String>) {
         defaultAnswers += init()
     }
 
-    fun defaultAnswer(): String {
-        return defaultAnswers[(0..defaultAnswers.lastIndex).random()]
+    fun defaultAnswer(): Mono<String> {
+        return Mono.just(defaultAnswers[(0..defaultAnswers.lastIndex).random()])
     }
 
 }
@@ -32,9 +33,9 @@ open class RuleEngine {
 class AnswerContext {
 
     lateinit var patterns: List<Word>
-    lateinit var answerFun: () -> String
+    lateinit var answerFun: () -> Mono<String>
 
-    fun thenAnswer(answerFun: () -> String) {
+    fun thenAnswer(answerFun: () -> Mono<String>) {
         this.answerFun = answerFun
     }
 
