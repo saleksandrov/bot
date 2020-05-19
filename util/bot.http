@@ -22,7 +22,7 @@ Content-Type: application/json
         "type": "private"
       },
       "date": "[INTEGER]",
-      "text": "Какая погода в Лугах?"
+      "text": "test"
     }
 
 }
