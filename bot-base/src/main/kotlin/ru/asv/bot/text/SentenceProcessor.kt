@@ -1,7 +1,6 @@
 package ru.asv.bot.text
 
 import org.springframework.stereotype.Component
-import org.springframework.util.ResourceUtils
 
 interface SentenceProcessor {
 
@@ -13,9 +12,9 @@ class NaiveSentenceProcessor: SentenceProcessor {
 
     private val patternRegexp = Regex("[!@#$%^&*()?\"'><.,{}\\[\\]]")
     private val splitRegex = Regex("\\s+")
-    private val stopWords: Set<String> = ResourceUtils
-        .getFile("classpath:stopwords.txt")
-        .readLines(Charsets.UTF_8).toSet()
+    private val stopWords: Set<String> = javaClass.getResourceAsStream("classpath:text/stopwords.txt")
+        .reader(Charsets.UTF_8)
+        .readLines().toSet()
 
     override fun splitToWords(sentence: String): List<String> {
         val reducedSentence = sentence.toLowerCase().replace(patternRegexp, "")
