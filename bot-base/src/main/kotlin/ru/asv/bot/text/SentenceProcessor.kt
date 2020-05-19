@@ -14,12 +14,8 @@ class NaiveSentenceProcessor: SentenceProcessor {
     private val patternRegexp = Regex("[!@#$%^&*()?\"'><.,{}\\[\\]]")
     private val splitRegex = Regex("\\s+")
     private val stopWords: Set<String> = ResourceUtils
-        .getFile("classpath:text/stopwords.txt")
+        .getFile("classpath:text/stopwords.json")
         .readLines(Charsets.UTF_8).toSet()
-
-    init {
-        // load stopwords
-    }
 
     override fun splitToWords(sentence: String): List<String> {
         val reducedSentence = sentence.toLowerCase().replace(patternRegexp, "")
