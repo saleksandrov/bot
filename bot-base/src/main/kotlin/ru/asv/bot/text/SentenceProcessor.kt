@@ -27,8 +27,3 @@ class NaiveSentenceProcessor: SentenceProcessor {
         return words.filter { !stopWords.contains(it) }.toList()
     }
 }
-
-fun main() {
-
-
-}
