@@ -14,7 +14,7 @@ class NaiveSentenceProcessor: SentenceProcessor {
     private val patternRegexp = Regex("[!@#$%^&*()?\"'><.,{}\\[\\]]")
     private val splitRegex = Regex("\\s+")
     private val stopWords: Set<String> = ResourceUtils
-        .getFile("classpath:text/stopwords.txt")
+        .getFile("stopwords.txt")
         .readLines(Charsets.UTF_8).toSet()
 
     override fun splitToWords(sentence: String): List<String> {
