@@ -70,7 +70,7 @@ class MessageRestService @Autowired constructor(
 
             BotRequest(
                 chatObject["id"].asInt,
-                messageObject["ru/asv/bot/text"].asString
+                messageObject["text"].asString
             )
 
         }
