@@ -38,6 +38,7 @@ class MessageRestService @Autowired constructor(private val weatherAdapter: Weat
                 return weatherAdapter.getWeather().flatMap {
                     val answer = """
                          В Лугах сейчас: Температура ${it.fact.temp}, ощущается как ${it.fact.feels_like}, скорость ветра ${it.fact.wind_speed}""".trimIndent()
+
                     val botResponse = BotResponse("sendMessage", botRequest.chatId, answer)
                     Mono.just(ResponseEntity.ok(botResponse) as ResponseEntity<Any>)
                 }
@@ -71,7 +72,7 @@ class MessageRestService @Autowired constructor(private val weatherAdapter: Weat
 
             BotRequest(
                 chatObject["id"].asInt,
-                messageObject["text"].asString
+                messageObject["ru/asv/bot/text"].asString
             )
 
         }

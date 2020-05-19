@@ -1,5 +1,12 @@
 package ru.asv.bot.rule
 
+import org.springframework.stereotype.Component
+import ru.asv.bot.text.OptionalWord
+import ru.asv.bot.text.RegexpWord
+import ru.asv.bot.text.RequiredWord
+import ru.asv.bot.text.Word
+
+@Component
 class LugaBotRules : RuleEngine() {
 
     init {
@@ -18,7 +25,7 @@ class LugaBotRules : RuleEngine() {
                     listOf<Word>(
                         RequiredWord("погода"),
                         OptionalWord(RequiredWord("бунинских")),
-                        RegexpWord("лугах")
+                        RegexpWord("луга.*")
                     )
                 }
 
@@ -36,7 +43,7 @@ class LugaBotRules : RuleEngine() {
                 }
 
                 thenAnswer {
-                    "Телефон УК +7 (495) 111-22-33"
+                    "Телефон УК +7 (800) 505-89-89"
                 }
             }
 
