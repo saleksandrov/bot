@@ -1,6 +1,6 @@
 package ru.asv.bot.text
 
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 class SentenceProcessorTest {
 

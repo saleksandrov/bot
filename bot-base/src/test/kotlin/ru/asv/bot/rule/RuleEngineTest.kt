@@ -1,32 +1,39 @@
 package ru.asv.bot.rule
 
-import org.junit.Test
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import ru.asv.bot.adapter.WeatherAdapter
 import ru.asv.bot.text.NaiveWordProcessor
+import ru.asv.bot.text.WordProcessor
 
+@SpringBootTest(classes = [LugaBotRules::class, WeatherAdapter::class, NaiveWordProcessor::class])
+@Disabled
 class RuleEngineTest {
-    
-    private val wp = NaiveWordProcessor()
+
+    @Autowired
+    lateinit var rules: RuleEngine
+
+    @Autowired
+    lateinit var wp: WordProcessor
 
     @Test
-    fun main() {
-
-        //val lugaBot = LugaBotRules(WeatherAdapter())
-
+    fun testSimpleQueries() {
         // success
-        //println(wp.determineAnswer(listOf("погода", "лугах"), lugaBot))
-        //println(wp.determineAnswer(listOf("погода", "бунинских", "лугах"), lugaBot))
-        //println(wp.determineAnswer(listOf("телефон", "ук"), lugaBot))
+        println(wp.determineAnswer(listOf("погода", "лугах"), rules).block())
+        println(wp.determineAnswer(listOf("погода", "бунинских", "лугах"), rules).block())
+        println(wp.determineAnswer(listOf("телефон", "ук"), rules).block())
 
         // error
-        //println(wp.determineAnswer(listOf("погода12", "бунинских", "лугах"), lugaBot))
-        //println(wp.determineAnswer(listOf("погода"), lugaBot))
-        //println(wp.determineAnswer(listOf("лугах"), lugaBot))
-        //println(wp.determineAnswer(listOf("бунинских", "лугах"), lugaBot))
-        //println(wp.determineAnswer(listOf("телефон", "ук", "123"), lugaBot))
-        //println(wp.determineAnswer(listOf("телефон"), lugaBot))
-        //println(wp.determineAnswer(listOf("телефон", "телефон", "телефон"), lugaBot))
-        //println(wp.determineAnswer(listOf("телефон", "телефон", "телефон", "dsdsdd3423424", "dsasdasd"), lugaBot))
-
+        println(wp.determineAnswer(listOf("погода12", "бунинских", "лугах"), rules).block())
+        println(wp.determineAnswer(listOf("погода"), rules).block())
+        println(wp.determineAnswer(listOf("лугах"), rules).block())
+        println(wp.determineAnswer(listOf("бунинских", "лугах"), rules).block())
+        println(wp.determineAnswer(listOf("телефон", "ук", "123"), rules).block())
+        println(wp.determineAnswer(listOf("телефон"), rules).block())
+        println(wp.determineAnswer(listOf("телефон", "телефон", "телефон"), rules).block())
+        println(wp.determineAnswer(listOf("телефон", "телефон", "телефон", "dsdsdd3423424", "dsasdasd"), rules).block())
     }
 
 }
