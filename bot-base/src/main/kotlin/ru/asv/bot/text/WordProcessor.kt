@@ -13,7 +13,7 @@ class NaiveWordProcessor : WordProcessor {
 
     override fun determineAnswer(questionWords: List<String>, ruleEngine: RuleEngine): Mono<String> {
         var answer = ruleEngine.defaultAnswer()
-        ruleEngine.answers.forEach answer@{ patternWordsList, v ->
+        ruleEngine.ac.answers().forEach answer@{ patternWordsList, v ->
             var errors = 0
             var startIndex = 0
             patternWordsList.forEach { patternWord ->

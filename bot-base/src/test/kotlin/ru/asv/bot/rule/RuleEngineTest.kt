@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import ru.asv.bot.adapter.WeatherAdapter
+import ru.asv.bot.text.NaiveSentenceProcessor
 import ru.asv.bot.text.NaiveWordProcessor
 import ru.asv.bot.text.WordProcessor
 
@@ -34,6 +35,10 @@ class RuleEngineTest {
         println(wp.determineAnswer(listOf("телефон"), rules).block())
         println(wp.determineAnswer(listOf("телефон", "телефон", "телефон"), rules).block())
         println(wp.determineAnswer(listOf("телефон", "телефон", "телефон", "dsdsdd3423424", "dsasdasd"), rules).block())
+
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Какой адрес УК?"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Подскажи контакты УК"), rules).block())
+
     }
 
 }

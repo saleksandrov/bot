@@ -9,18 +9,14 @@ import ru.asv.bot.text.Word
 
 open class RuleEngine {
 
-    val answers = mutableMapOf<List<Word>, () -> Mono<String>>()
-
     private val defaultAnswers = mutableListOf<String>()
 
-    protected fun botRule(init: () -> Unit) {
-        init.invoke()
-    }
+    lateinit var ac: AnswerContext
 
-    protected fun answer(init: AnswerContext.() -> Unit) {
+    protected fun botRule(init: AnswerContext.() -> Unit) {
         val ac = AnswerContext()
         ac.init()
-        answers[ac.patterns] = ac.answerFun
+        this.ac = ac
     }
 
     protected fun defaultAnswers(vararg answers: String) {
@@ -35,19 +31,33 @@ open class RuleEngine {
 
 class AnswerContext {
 
-    lateinit var patterns: List<Word>
-    lateinit var answerFun: () -> Mono<String>
+    private val answers = mutableMapOf<List<Word>, () -> Mono<String>>()
 
-    fun thenAnswer(answerFun: () -> Mono<String>) {
+    private lateinit var patterns: List<Word>
+    private lateinit var answerFun: () -> Mono<String>
+
+    fun answers(): Map<List<Word>, () -> Mono<String>> {
+        return this.answers.toMap()
+    }
+
+    private fun thenAnswer(answerFun: () -> Mono<String>) {
         this.answerFun = answerFun
     }
 
-    fun thenAnswer(answer: String) {
+    private fun thenAnswer(answer: String) {
         this.answerFun = { Mono.just(answer) }
     }
 
-    fun whenMatches(vararg patterns: Word) {
+    fun answerWhenMatches(vararg patterns: Word, answer: () -> Mono<String>) {
         this.patterns = patterns.toList()
+        thenAnswer(answer)
+        answers[this.patterns] = this.answerFun
+    }
+
+    fun answerWhenMatches(vararg patterns: Word, answer: String) {
+        this.patterns = patterns.toList()
+        thenAnswer(answer)
+        answers[this.patterns] = this.answerFun
     }
 
     fun word(word: String): Word {
@@ -56,6 +66,10 @@ class AnswerContext {
 
     fun optional(word: String): Word {
         return OptionalWord(RequiredWord(word))
+    }
+
+    fun optionalRegexp(word: String): Word {
+        return OptionalWord(RegexpWord(word))
     }
 
     fun regexp(word: String): Word {
