@@ -14,7 +14,7 @@ open class RuleEngine {
     private val defaultAnswers = mutableListOf<String>()
 
     protected fun botRule(init: () -> Unit) {
-        init()
+        init.invoke()
     }
 
     protected fun answer(init: AnswerContext.() -> Unit) {

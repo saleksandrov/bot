@@ -34,12 +34,12 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
             }
 
             answer {
-                whenMatches (
-                        word("телефон"),
-                        word("ук")
+                whenMatches(
+                    word("телефон"),
+                    word("ук")
                 )
 
-                thenAnswer (
+                thenAnswer(
                     "Телефон УК +7 (800) 505-89-89"
                 )
             }
