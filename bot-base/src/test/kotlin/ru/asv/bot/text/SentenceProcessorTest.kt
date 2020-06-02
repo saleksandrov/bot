@@ -8,6 +8,7 @@ class SentenceProcessorTest {
     fun testProcessor() {
         println(NaiveSentenceProcessor().splitToWords("!Какая погода в лугах?"))
         println(NaiveSentenceProcessor().splitToWords("Подскажи контакты УК"))
+        println(NaiveSentenceProcessor().splitToWords("Какое время работы УК"))
     }
 
 }

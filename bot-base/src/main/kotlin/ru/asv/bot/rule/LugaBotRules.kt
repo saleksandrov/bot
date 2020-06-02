@@ -60,7 +60,7 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
             answerWhenMatches(
                 word("время"),
                 regexp("работ.*"),
-                optionalRegexp("офис"),
+                optionalRegexp("офис.*"),
                 word("ук"),
                 answer = "Ежедневно 9:00-21:00"
             )

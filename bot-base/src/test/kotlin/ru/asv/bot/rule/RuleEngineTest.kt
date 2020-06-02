@@ -1,6 +1,5 @@
 package ru.asv.bot.rule
 
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -10,7 +9,7 @@ import ru.asv.bot.text.NaiveWordProcessor
 import ru.asv.bot.text.WordProcessor
 
 @SpringBootTest(classes = [LugaBotRules::class, WeatherAdapter::class, NaiveWordProcessor::class])
-@Disabled
+//@Disabled
 class RuleEngineTest {
 
     @Autowired
@@ -38,6 +37,7 @@ class RuleEngineTest {
 
         println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Какой адрес УК?"), rules).block())
         println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Подскажи контакты УК"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Какое время работы офиса УК"), rules).block())
 
     }
 
