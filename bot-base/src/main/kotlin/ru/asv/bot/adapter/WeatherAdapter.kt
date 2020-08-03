@@ -23,7 +23,7 @@ class WeatherAdapter(
         return WebClient.create("https://api.weather.yandex.ru")
             .get()
             .uri(
-                "/v1/forecast?lat={lat}&lon={lon}&lang=ru_RU&limit=1&hours=false&extra=false",
+                "/v1/informers?lat={lat}&lon={lon}&lang=ru_RU&limit=1&hours=false&extra=false",
                 "55.542066",
                 "37.483933"
             )
