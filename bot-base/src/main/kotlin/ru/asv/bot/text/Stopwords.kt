@@ -423,5 +423,7 @@ class Stopwords {
         суть
         чуть
         тысяч
+        взять 
+        получить
     """.trimIndent()
 }

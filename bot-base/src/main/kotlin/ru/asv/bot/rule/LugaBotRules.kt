@@ -82,7 +82,7 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
             val registerAnswer = """
                 Прописаться можно в офисе заселения по адресу ул. Александры Монаховой д. 98к1 
                 (вторник, четверг c 9.00 - 18.00) +7 (495) 266-93-01
-                или в МФЦ по адресу ул. Александры Монаховой д. 23  "
+                или в МФЦ по адресу ул. Александры Монаховой д. 23  
             """.trimIndent()
 
             answerWhenMatches(
@@ -94,9 +94,20 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
 
             answerWhenMatches(
                 word("прописка"),
-                optional("бунинских"),
                 optionalRegexp("луга.*"),
                 answer = registerAnswer
+            )
+
+            answerWhenMatches(
+                optionalRegexp("квитанц.*"),
+                regexp("оплат.*"),
+                regexp("кап.*"),
+                regexp("ремонт.*"),
+                regexp("кладов.*"),
+                answer = """
+                    Для получения квитанции на оплату кап. ремонта кладовой необходимо лично обратиться в Расчетный центр 
+                    по адресу ул. Профсоюзная д. 130 к4 в будни (при себе иметь выписку ЕГРН и паспорт)"
+                """.trimIndent()
             )
 
         }

@@ -17,7 +17,7 @@ class NaiveWordProcessor : WordProcessor {
             var errors = 0
             var startIndex = 0
             patternWordsList.forEach { patternWord ->
-                if (questionWords.size >= startIndex + 1) {
+                if (questionWords.size >= startIndex + 1 ) {
                     val matches = patternWord.matches(questionWords[startIndex])
                     if (!matches) {
                         if (!patternWord.isOptional()) {
@@ -27,9 +27,10 @@ class NaiveWordProcessor : WordProcessor {
                     } else {
                         startIndex++
                     }
-
+                } else if (patternWord.isOptional()) {
+                    // do nothing
                 } else {
-                    // Size of question words is greater than our answer pattern => is not matched
+                    // Size of question words is lower than our answer pattern => is not matched
                     return@answer
                 }
             }

@@ -21,11 +21,23 @@ class RuleEngineTest {
     @Test
     fun testSimpleQueries() {
         // success
-        println(wp.determineAnswer(listOf("погода", "лугах"), rules).block())
-        println(wp.determineAnswer(listOf("погода", "бунинских", "лугах"), rules).block())
-        println(wp.determineAnswer(listOf("телефон", "ук"), rules).block())
+        println("== Success")
+        //println(wp.determineAnswer(listOf("погода", "лугах"), rules).block())
+        //println(wp.determineAnswer(listOf("погода", "бунинских", "лугах"), rules).block())
+        //println(wp.determineAnswer(listOf("телефон", "ук"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Какой адрес УК?"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Подскажи контакты УК"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Какое время работы офиса УК"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("прописка"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Как прописаться в лугах"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Как прописаться в бунинских лугах"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Как прописаться?"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("квитанция на оплату капитального ремонта кладовой"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Как получить квитанцию на оплату кап ремонта кладовой"), rules).block())
+        println("")
 
         // error
+        println("=== Error")
         println(wp.determineAnswer(listOf("погода12", "бунинских", "лугах"), rules).block())
         println(wp.determineAnswer(listOf("погода"), rules).block())
         println(wp.determineAnswer(listOf("лугах"), rules).block())
@@ -35,9 +47,6 @@ class RuleEngineTest {
         println(wp.determineAnswer(listOf("телефон", "телефон", "телефон"), rules).block())
         println(wp.determineAnswer(listOf("телефон", "телефон", "телефон", "dsdsdd3423424", "dsasdasd"), rules).block())
 
-        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Какой адрес УК?"), rules).block())
-        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Подскажи контакты УК"), rules).block())
-        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Какое время работы офиса УК"), rules).block())
 
     }
 
