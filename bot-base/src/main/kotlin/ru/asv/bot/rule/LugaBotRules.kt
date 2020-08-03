@@ -48,7 +48,7 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
 
             answerWhenMatches(
                 word("ук"),
-                answer = "Уточните пожалуйста вопрос. Например 'Какай адрес УК?'"
+                answer = "Уточните пожалуйста вопрос. Например 'Какай адрес УК?', 'G'"
             )
 
             answerWhenMatches(
@@ -75,10 +75,29 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                 regexp("контакт.*"),
                 regexp("служб.*"),
                 word("эксплуатации"),
-                regexp("дом"),
+                optionalRegexp("дом"),
                 answer = "Адрес УК ул. Александры Монаховой д. 94 к. 5, Офис работает ежедневно 9:00-21:00"
             )
 
+            val registerAnswer = """
+                Прописаться можно в офисе заселения по адресу ул. Александры Монаховой д. 98к1 
+                (вторник, четверг c 9.00 - 18.00) +7 (495) 266-93-01
+                или в МФЦ по адресу ул. Александры Монаховой д. 23  "
+            """.trimIndent()
+
+            answerWhenMatches(
+                regexp("прописать.*"),
+                optional("бунинских"),
+                optionalRegexp("луга.*"),
+                answer = registerAnswer
+            )
+
+            answerWhenMatches(
+                word("прописка"),
+                optional("бунинских"),
+                optionalRegexp("луга.*"),
+                answer = registerAnswer
+            )
 
         }
 
