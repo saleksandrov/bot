@@ -17,7 +17,6 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                 "Попробуйте уточнить вопрос."
             )
 
-
             answerWhenMatches(
                 word("погода"),
                 optional("бунинских"),
@@ -93,6 +92,12 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
             )
 
             answerWhenMatches(
+                regexp("прописать.*"),
+                word("жк"),
+                answer = registerAnswer
+            )
+
+            answerWhenMatches(
                 word("прописка"),
                 optionalRegexp("луга.*"),
                 answer = registerAnswer
@@ -100,9 +105,9 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
 
             answerWhenMatches(
                 optionalRegexp("квитанц.*"),
-                regexp("оплат.*"),
+                optionalRegexp("оплат.*"),
                 regexp("кап.*"),
-                regexp("ремонт.*"),
+                optionalRegexp("ремонт.*"),
                 regexp("кладов.*"),
                 answer = """
                     Для получения квитанции на оплату кап. ремонта кладовой необходимо лично обратиться в Расчетный центр 
@@ -110,6 +115,10 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                 """.trimIndent()
             )
 
+            answerWhenContains(
+                regexp("капремонт.*"),
+                answer = "Уточните пожалуйста вопрос, например 'Как получить квитанцию на оплату капремонта по кладовой?'"
+            )
         }
 
     }

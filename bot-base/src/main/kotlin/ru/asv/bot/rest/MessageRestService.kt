@@ -16,6 +16,8 @@ import ru.asv.bot.model.BotResponse
 import ru.asv.bot.rule.RuleEngine
 import ru.asv.bot.text.SentenceProcessor
 import ru.asv.bot.text.WordProcessor
+import ru.asv.bot.text.execCommand
+import ru.asv.bot.text.isSystemCommand
 import java.lang.reflect.Type
 
 @Suppress("UNCHECKED_CAST")
@@ -39,11 +41,18 @@ class MessageRestService @Autowired constructor(
             val botRequest = parseRequest(request)
             rqLog.info("Extracted request data: ${botRequest!!}")
 
-            wp.determineAnswer(sp.splitToWords(botRequest.text), botRules)
-                .flatMap {
+            return if (isSystemCommand(botRequest.text)) {
+                execCommand(botRequest.text).flatMap {
                     val botResponse = BotResponse("sendMessage", botRequest.chatId, it)
                     Mono.just(ResponseEntity.ok(botResponse) as ResponseEntity<Any>)
                 }
+            } else {
+                wp.determineAnswer(sp.splitToWords(botRequest.text), botRules)
+                    .flatMap {
+                        val botResponse = BotResponse("sendMessage", botRequest.chatId, it)
+                        Mono.just(ResponseEntity.ok(botResponse) as ResponseEntity<Any>)
+                    }
+            }
         } catch (ex: Exception) {
             log.error("Error during input request handling", ex)
             Mono.just(ResponseEntity.badRequest().body("Error") as ResponseEntity<Any>)

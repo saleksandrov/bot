@@ -12,12 +12,12 @@ interface WordProcessor {
 class NaiveWordProcessor : WordProcessor {
 
     override fun determineAnswer(questionWords: List<String>, ruleEngine: RuleEngine): Mono<String> {
-        var answer = ruleEngine.defaultAnswer()
+        var answer: Mono<String>? = null
         ruleEngine.ac.answers().forEach answer@{ patternWordsList, v ->
             var errors = 0
             var startIndex = 0
             patternWordsList.forEach { patternWord ->
-                if (questionWords.size >= startIndex + 1 ) {
+                if (questionWords.size >= startIndex + 1) {
                     val matches = patternWord.matches(questionWords[startIndex])
                     if (!matches) {
                         if (!patternWord.isOptional()) {
@@ -41,9 +41,29 @@ class NaiveWordProcessor : WordProcessor {
                 answer = v()
                 return@answer
             }
-
         }
-        return answer
+
+        if (answer == null) {
+            ruleEngine.ac.keyWordAnswers().forEach { patternWordsList, v ->
+                var matches = 0
+                questionWords.forEach { questionWord ->
+                    patternWordsList.forEach {patternWord ->
+                        if (patternWord.matches(questionWord)) {
+                            matches++
+                        }
+                    }
+                    // for small optimization
+                    if (matches == patternWordsList.size) {
+                        answer = v()
+                    }
+                }
+                if (matches == patternWordsList.size) {
+                    answer = v()
+                }
+            }
+        }
+
+        return answer ?: ruleEngine.defaultAnswer()
     }
 }
 

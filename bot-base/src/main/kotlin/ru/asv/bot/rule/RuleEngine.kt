@@ -32,12 +32,17 @@ open class RuleEngine {
 class AnswerContext {
 
     private val answers = mutableMapOf<List<Word>, () -> Mono<String>>()
+    private val keyWordAnswers = mutableMapOf<List<Word>, () -> Mono<String>>()
 
     private lateinit var patterns: List<Word>
     private lateinit var answerFun: () -> Mono<String>
 
     fun answers(): Map<List<Word>, () -> Mono<String>> {
         return this.answers.toMap()
+    }
+
+    fun keyWordAnswers(): Map<List<Word>, () -> Mono<String>> {
+        return this.keyWordAnswers.toMap()
     }
 
     private fun thenAnswer(answerFun: () -> Mono<String>) {
@@ -49,6 +54,7 @@ class AnswerContext {
     }
 
     fun answerWhenMatches(vararg patterns: Word, answer: () -> Mono<String>) {
+        // rewrites value for each invocation (not thread safe)
         this.patterns = patterns.toList()
         thenAnswer(answer)
         answers[this.patterns] = this.answerFun
@@ -58,6 +64,11 @@ class AnswerContext {
         this.patterns = patterns.toList()
         thenAnswer(answer)
         answers[this.patterns] = this.answerFun
+    }
+
+    fun answerWhenContains(vararg patterns: Word, answer: String) {
+        thenAnswer(answer)
+        keyWordAnswers[patterns.toList()] = this.answerFun
     }
 
     fun word(word: String): Word {

@@ -32,8 +32,15 @@ class RuleEngineTest {
         println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Как прописаться в лугах"), rules).block())
         println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Как прописаться в бунинских лугах"), rules).block())
         println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Как прописаться?"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Как прописаться в ЖК?"), rules).block())
         println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("квитанция на оплату капитального ремонта кладовой"), rules).block())
         println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Как получить квитанцию на оплату кап ремонта кладовой"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Как получить квитанцию на капремонт кладовой"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Как получить квитанцию на оплату капремонта кладовой"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("капремонт кладовой"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Как получить квитанцию на оплату капремонта по кладовой?"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("капремонт"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("слово капремонт слово"), rules).block())
         println("")
 
         // error
