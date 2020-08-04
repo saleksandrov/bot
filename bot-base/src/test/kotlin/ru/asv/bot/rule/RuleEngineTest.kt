@@ -22,9 +22,10 @@ class RuleEngineTest {
     fun testSimpleQueries() {
         // success
         println("== Success")
-        //println(wp.determineAnswer(listOf("погода", "лугах"), rules).block())
-        //println(wp.determineAnswer(listOf("погода", "бунинских", "лугах"), rules).block())
-        //println(wp.determineAnswer(listOf("телефон", "ук"), rules).block())
+        //println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Какая погода в ЖК?"), rules).block())
+        //println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Какая погода в бунинских лугах?"), rules).block())
+        //println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Какая погода в лугах?"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Какой телефон в УК"), rules).block())
         println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Какой адрес УК?"), rules).block())
         println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Подскажи контакты УК"), rules).block())
         println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Какое время работы офиса УК"), rules).block())

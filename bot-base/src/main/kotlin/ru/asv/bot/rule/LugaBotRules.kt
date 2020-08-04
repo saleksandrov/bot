@@ -20,7 +20,9 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
             answerWhenMatches(
                 word("погода"),
                 optional("бунинских"),
-                regexp("луга.*")
+                optionalRegexp("луга.*"),
+                optional("жк")
+
             ) {
                 weatherAdapter.getData().flatMap {
                     val answer = """
@@ -47,7 +49,7 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
 
             answerWhenMatches(
                 word("ук"),
-                answer = "Уточните пожалуйста вопрос. Например 'Какай адрес УК?', 'G'"
+                answer = "Уточните пожалуйста вопрос. Например 'Какай адрес УК?', 'Подскажи контакты УК?'"
             )
 
             answerWhenMatches(
@@ -111,7 +113,7 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                 regexp("кладов.*"),
                 answer = """
                     Для получения квитанции на оплату кап. ремонта кладовой необходимо лично обратиться в Расчетный центр 
-                    по адресу ул. Профсоюзная д. 130 к4 в будни (при себе иметь выписку ЕГРН и паспорт)"
+                    по адресу ул. Профсоюзная д. 130 к4 в будни (при себе иметь выписку ЕГРН и паспорт)
                 """.trimIndent()
             )
 
