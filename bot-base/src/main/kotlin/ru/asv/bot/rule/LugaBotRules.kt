@@ -22,11 +22,13 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                 optional("бунинских"),
                 optionalRegexp("луга.*"),
                 optional("жк")
-
             ) {
                 weatherAdapter.getData().flatMap {
                     val answer = """
-                         В Лугах сейчас: Температура ${it.fact.temp}, ощущается как ${it.fact.feels_like}, скорость ветра ${it.fact.wind_speed}""".trimIndent()
+                        В Лугах сейчас: Температура ${it.fact.temp}, ощущается как ${it.fact.feels_like}, скорость ветра ${it.fact.wind_speed}
+                        
+                        Данные предоставлены сервисом Яндекс.Погода (https://yandex.ru/pogoda/moscow)
+                        """.trimIndent()
                     Mono.just(answer)
                 }
             }
