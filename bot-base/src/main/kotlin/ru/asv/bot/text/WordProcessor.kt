@@ -77,7 +77,7 @@ interface Word {
 
 }
 
-data class RequiredWord(val word: String) : Word {
+data class RequiredWord(private val word: String) : Word {
 
     override fun matches(value: String): Boolean {
         return word == value
@@ -85,7 +85,7 @@ data class RequiredWord(val word: String) : Word {
 
 }
 
-data class OptionalWord(val word: Word) : Word {
+data class OptionalWord(private val word: Word) : Word {
 
     override fun matches(value: String): Boolean {
         return word.matches(value)
@@ -97,7 +97,7 @@ data class OptionalWord(val word: Word) : Word {
 
 }
 
-data class RegexpWord(val word: String) : Word {
+data class RegexpWord(private val word: String) : Word {
 
     private val regex: Regex = word.toRegex()
 
@@ -107,4 +107,15 @@ data class RegexpWord(val word: String) : Word {
 
 }
 
+data class MultiWord(private val words: List<Word>) : Word {
 
+    override fun matches(value: String): Boolean {
+        words.forEach {
+            if (it.matches(value)) {
+                return true
+            }
+        }
+        return false
+    }
+
+}

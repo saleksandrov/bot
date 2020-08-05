@@ -74,6 +74,11 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
 
             answerWhenMatches(
                 regexp("контакт.*"),
+                answer = "Уточните пожалуйста вопрос. Например 'Какие контакты УК?', 'Какой телефон у УК?'"
+            )
+
+            answerWhenMatches(
+                regexp("контакт.*"),
                 regexp("служб.*"),
                 word("эксплуатации"),
                 optionalRegexp("дом"),

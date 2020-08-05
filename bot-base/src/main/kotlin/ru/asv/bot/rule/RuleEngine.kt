@@ -1,10 +1,7 @@
 package ru.asv.bot.rule
 
 import reactor.core.publisher.Mono
-import ru.asv.bot.text.OptionalWord
-import ru.asv.bot.text.RegexpWord
-import ru.asv.bot.text.RequiredWord
-import ru.asv.bot.text.Word
+import ru.asv.bot.text.*
 
 
 open class RuleEngine {
@@ -85,6 +82,15 @@ class AnswerContext {
 
     fun regexp(word: String): Word {
         return RegexpWord(word)
+    }
+
+    fun or(vararg words: Word): Word {
+        words.forEach {
+            if (it.isOptional()) {
+                throw RuntimeException("Is not allowed to add optional word to OR predicate")
+            }
+        }
+        return MultiWord(words.toList())
     }
 
 }
