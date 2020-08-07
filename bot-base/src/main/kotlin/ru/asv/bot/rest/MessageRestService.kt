@@ -37,9 +37,10 @@ class MessageRestService @Autowired constructor(
     fun processMessage(@RequestBody request: String) : Mono<ResponseEntity<Any>> {
         rqLog.info("Received request ${request}")
 
-        return try {
+        var botRequest: BotRequest? = null
+        try {
             logRequest.newRequest(request)
-            val botRequest = parseRequest(request)
+            botRequest = parseRequest(request)
             rqLog.info("Extracted request data: ${botRequest!!}")
 
             return if (isSystemCommand(botRequest.text)) {
@@ -56,7 +57,12 @@ class MessageRestService @Autowired constructor(
             }
         } catch (ex: Exception) {
             log.error("Error during input request handling", ex)
-            Mono.just(ResponseEntity.badRequest().body("Error") as ResponseEntity<Any>)
+            if (botRequest != null) {
+                val botResponse = BotResponse("sendMessage", botRequest.chatId, "Не смог прочитать вопрос")
+                return Mono.just(ResponseEntity.ok(botResponse) as ResponseEntity<Any>)
+            } else {
+                return Mono.just(ResponseEntity.badRequest().body("Error") as ResponseEntity<Any>)
+            }
         }
 
     }
