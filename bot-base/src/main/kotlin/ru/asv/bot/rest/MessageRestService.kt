@@ -86,7 +86,11 @@ class MessageRestService @Autowired constructor(
 
             BotRequest(
                 chatObject["id"].asInt,
-                messageObject["text"].asString
+                if (messageObject.has("text")) {
+                    messageObject["text"].asString
+                } else {
+                    ""
+                }
             )
 
         }
