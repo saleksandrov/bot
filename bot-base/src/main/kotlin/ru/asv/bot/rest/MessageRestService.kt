@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Mono
-import ru.asv.bot.adapter.WeatherAdapter
 import ru.asv.bot.model.BotRequest
 import ru.asv.bot.model.BotResponse
+import ru.asv.bot.rest.component.LogComponent
 import ru.asv.bot.rule.RuleEngine
 import ru.asv.bot.text.SentenceProcessor
 import ru.asv.bot.text.WordProcessor
@@ -24,10 +24,10 @@ import java.lang.reflect.Type
 @RestController
 @RequestMapping("/api/v1/bot", produces = [MediaType.APPLICATION_JSON_VALUE])
 class MessageRestService @Autowired constructor(
-    private val weatherAdapter: WeatherAdapter,
     private val sp: SentenceProcessor,
     private val botRules: RuleEngine,
-    private val wp: WordProcessor
+    private val wp: WordProcessor,
+    private val logRequest: LogComponent
     ) {
 
     private val log = LoggerFactory.getLogger(MessageRestService::class.java)
@@ -38,6 +38,7 @@ class MessageRestService @Autowired constructor(
         rqLog.info("Received request ${request}")
 
         return try {
+            logRequest.newRequest(request)
             val botRequest = parseRequest(request)
             rqLog.info("Extracted request data: ${botRequest!!}")
 
