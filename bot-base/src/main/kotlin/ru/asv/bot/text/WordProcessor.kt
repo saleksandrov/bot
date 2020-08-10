@@ -1,8 +1,10 @@
 package ru.asv.bot.text
 
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import ru.asv.bot.rule.RuleEngine
+import java.util.concurrent.TimeUnit
 
 interface WordProcessor {
     fun determineAnswer(questionWords: List<String>, ruleEngine: RuleEngine): Mono<String>
@@ -11,13 +13,18 @@ interface WordProcessor {
 @Component
 class NaiveWordProcessor : WordProcessor {
 
+    private val log = LoggerFactory.getLogger(WordProcessor::class.java)
+
     override fun determineAnswer(questionWords: List<String>, ruleEngine: RuleEngine): Mono<String> {
         var answer: Mono<String>? = null
+        var totalMatches = 0
+        val startTime = System.nanoTime()
         ruleEngine.ac.answers().forEach answer@{ patternWordsList, v ->
             var errors = 0
             var startIndex = 0
             patternWordsList.forEach { patternWord ->
                 if (questionWords.size >= startIndex + 1) {
+                    totalMatches++
                     val matches = patternWord.matches(questionWords[startIndex])
                     if (!matches) {
                         if (!patternWord.isOptional()) {
@@ -43,11 +50,13 @@ class NaiveWordProcessor : WordProcessor {
             }
         }
 
+        // try to search  by keywords if no matches
         if (answer == null) {
             ruleEngine.ac.keyWordAnswers().forEach { patternWordsList, v ->
                 var matches = 0
                 questionWords.forEach { questionWord ->
                     patternWordsList.forEach {patternWord ->
+                        totalMatches++
                         if (patternWord.matches(questionWord)) {
                             matches++
                         }
@@ -63,6 +72,18 @@ class NaiveWordProcessor : WordProcessor {
             }
         }
 
+        if (log.isInfoEnabled) {
+            val workTime = System.nanoTime() - startTime
+            val found = if (answer != null) "YES" else "NO"
+            log.info(
+                """Word algorithm metrics 
+                    totalMatches=${totalMatches} 
+                    workTime=${TimeUnit.MILLISECONDS.convert(workTime, TimeUnit.NANOSECONDS)}
+                    workTimeNano=${workTime}
+                    foundAnswer=${found}
+                 """.trimIndent()
+            )
+        }
         return answer ?: ruleEngine.defaultAnswer()
     }
 }

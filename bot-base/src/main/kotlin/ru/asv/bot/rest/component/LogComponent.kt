@@ -34,7 +34,7 @@ class LogComponent {
         if (lastRequests.size > 10) {
             lastRequests.poll()
         }
-        lastRequests.offer(request)
+        lastRequests.offer("Thread=${Thread.currentThread().name} JSON=${request}")
 
     }
 
