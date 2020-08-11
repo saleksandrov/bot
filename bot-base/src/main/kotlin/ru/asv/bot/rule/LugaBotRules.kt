@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import ru.asv.bot.adapter.WeatherAdapter
+import ru.asv.bot.text.SystemCommandProcessor
 
 @Component
 class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAdapter) : RuleEngine() {
@@ -15,6 +16,12 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                 "В моей базе еще нет ответа на этот вопрос. Но она пополняется.",
                 "Я еще пока не знаю ответа на этот вопрос.",
                 "Попробуйте уточнить вопрос."
+            )
+
+            //fist question
+            answerWhenMatches(
+                word("умеешь"),
+                answer = SystemCommandProcessor.aboutAnswer
             )
 
             // weather
@@ -157,6 +164,17 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                 regexp("капремонт.*"),
                 answer = "Уточните пожалуйста вопрос, например 'Как получить квитанцию на оплату капремонта по кладовой?'"
             )
+
+            answerWhenMatches(
+                word("шуметь"),
+                answer = """
+                    Можно шуметь кроме ремонтных работ 
+                    ПН-СБ 9:00-19:00 
+                    перерыв 13:00-15:00
+                """.trimIndent()
+
+            )
+
         }
 
     }

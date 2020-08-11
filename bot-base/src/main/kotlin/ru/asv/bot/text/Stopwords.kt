@@ -425,5 +425,6 @@ class Stopwords {
         тысяч
         взять 
         получить
+        расскажи
     """.trimIndent()
 }
