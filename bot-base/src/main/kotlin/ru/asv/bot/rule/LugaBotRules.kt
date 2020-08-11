@@ -17,6 +17,7 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                 "Попробуйте уточнить вопрос."
             )
 
+            // weather
             answerWhenMatches(
                 word("погода"),
                 optional("бунинских"),
@@ -34,12 +35,6 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
             }
 
             answerWhenMatches(
-                word("телефон"),
-                word("ук"),
-                answer = "Телефон УК +7 (800) 505-89-89"
-            )
-
-            answerWhenMatches(
                 word("погода"),
                 answer = "Уточните пожалуйста вопрос. Например 'Какая погода в Лугах?'"
             )
@@ -48,16 +43,34 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                 word("температура"),
                 answer = "Уточните пожалуйста вопрос. Например 'Какая погода в Лугах?'"
             )
+            //end weather
+
+            // Contacts
+            answerWhenMatches(
+                regexp("контакт.*"),
+                answer = "Уточните пожалуйста вопрос. Например 'Какие контакты УК?', 'Какой телефон у УК?'"
+            )
 
             answerWhenMatches(
                 word("ук"),
                 answer = "Уточните пожалуйста вопрос. Например 'Какай адрес УК?', 'Подскажи контакты УК?'"
             )
 
+            val contacts = """
+                    Управляющий Мордовин Кирилл Николаевич.
+                    Адрес УК ул. Александры Монаховой д. 94 к. 5. Офис работает по вторникам и четвергам 9:00-18:00.
+                    Телефон УК +7 (800) 505-89-89.
+                """.trimIndent()
+
+            answerWhenContains(
+                regexp("управляющи.*"),
+                answer = contacts
+            )
+
             answerWhenMatches(
-                word("адрес"),
+                word("телефон"),
                 word("ук"),
-                answer = "Адрес УК ул. Александры Монаховой д. 94 к. 5"
+                answer = "Телефон УК +7 (800) 505-89-89"
             )
 
             answerWhenMatches(
@@ -65,18 +78,25 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                 regexp("работ.*"),
                 optionalRegexp("офис.*"),
                 word("ук"),
-                answer = "Ежедневно 9:00-21:00"
+                answer = contacts
+            )
+
+            answerWhenMatches(
+                word("адрес"),
+                word("ук"),
+                answer = contacts
             )
 
             answerWhenMatches(
                 regexp("контакт.*"),
                 word("ук"),
-                answer = "Адрес УК ул. Александры Монаховой д. 94 к. 5, Офис работает ежедневно 9:00-21:00"
+                answer = contacts
             )
 
             answerWhenMatches(
                 regexp("контакт.*"),
-                answer = "Уточните пожалуйста вопрос. Например 'Какие контакты УК?', 'Какой телефон у УК?'"
+                regexp("управляющ.*"),
+                answer = contacts
             )
 
             answerWhenMatches(
@@ -84,8 +104,17 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                 regexp("служб.*"),
                 word("эксплуатации"),
                 optionalRegexp("дом"),
-                answer = "Адрес УК ул. Александры Монаховой д. 94 к. 5, Офис работает ежедневно 9:00-21:00"
+                answer = contacts
             )
+
+            answerWhenMatches(
+                optionalRegexp("контакт.*"),
+                regexp("управляющ.*"),
+                word("эксплуатации"),
+                optionalRegexp("дом"),
+                answer = contacts
+            )
+            //end contacts
 
             val registerAnswer = """
                 Прописаться можно в офисе заселения по адресу ул. Александры Монаховой д. 98к1 

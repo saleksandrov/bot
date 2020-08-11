@@ -25,6 +25,8 @@ class RuleEngineTest {
         //println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Какая погода в ЖК?"), rules).block())
         //println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Какая погода в бунинских лугах?"), rules).block())
         //println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Какая погода в лугах?"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("управляющий"), rules).block())
+        println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("контакты управляющего"), rules).block())
         println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Какой телефон в УК"), rules).block())
         println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Какой адрес УК?"), rules).block())
         println(wp.determineAnswer(NaiveSentenceProcessor().splitToWords("Подскажи контакты УК"), rules).block())
