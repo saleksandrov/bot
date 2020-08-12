@@ -211,6 +211,11 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                          """.trimIndent()
             )
 
+            answerWhenContains(
+                or(regexp("мастер.*"), regexp("сантехн.*"), regexp("'электри.*"), regexp("рабоч.*")),
+                answer = "Уточните пожалуйста вопрос. Например 'Подскажи контакты мастеров'"
+            )
+
         }
 
     }
