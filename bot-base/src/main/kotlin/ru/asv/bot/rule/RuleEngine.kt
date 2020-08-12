@@ -63,6 +63,21 @@ class AnswerContext {
         answers[this.patterns] = this.answerFun
     }
 
+    fun answerWhenSomeMatches(patterns: List<Array<out Word>>, answer: String) {
+        patterns.forEach {
+            thenAnswer(answer)
+            answers[it.toList()] = this.answerFun
+        }
+    }
+
+    fun variant(vararg patterns: Word): Array<out Word> {
+        return patterns
+    }
+
+    fun answers(vararg variants: Array<out Word>): List<Array<out Word>> {
+        return variants.toList()
+    }
+
     fun answerWhenContains(vararg patterns: Word, answer: String) {
         thenAnswer(answer)
         keyWordAnswers[patterns.toList()] = this.answerFun
