@@ -216,6 +216,73 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                 answer = "Уточните пожалуйста вопрос. Например 'Подскажи контакты мастеров'"
             )
 
+            answerWhenMatches(
+                or(regexp("контакт.*"), word("адрес")),
+                regexp("опорн.*"),
+                regexp("пункт.*"),
+                regexp("полиц.*"),
+                answer = "ул. Александры Монаховой, дом 105к2 https://yandex.ru/maps/-/CCQtMNdv~A"
+            )
+
+            answerWhenMatches(
+                or(regexp("контакт.*"), word("телефон")),
+                optionalRegexp("отделени.*"),
+                or(regexp("полиц.*"), word("МВД")),
+                optionalRegexp("коммунарк.*"),
+                answer = """
+                    15А, посёлок Коммунарка 
+                    Телефоны: 
+                      +7 (495) 817-72-02 
+                    Режим работы:
+                      ПН Выходной
+                      ВТ 18:00 – 20:00
+                      СР Выходной
+                      ЧТ 18:00 – 20:00
+                      ПТ Выходной
+                      СБ 10:00 – 12:00
+                      ВС Выходной
+                """.trimIndent()
+            )
+
+            answerWhenContains(
+                regexp("участков.*"),
+                answer = "Московский Дмитрий Анатольевич +7 (999) 010-77-12"
+            )
+
+            answerWhenMatches(
+                or(regexp("контакт.*"), word("адрес")),
+                regexp("почт.*"),
+                optionalRegexp("отделен.*"),
+                answer = """
+                            Отделение почтовой связи Коммунарка 108801
+                            ул. Липовый Парк, 8, корп. 2
+                            Телефоны: 
+                              +7 (800) 200-58-88
+                              +7 (800) 100-00-00
+                              +7 (929) 555-45-63
+                            Режим работы:
+                              ПН – ПТ 08:00 - 20:00
+                              СБ      09:00 - 18:00
+                              ВС      Выходной
+                              
+                            https://yandex.ru/maps/-/CCQtMRfhTA
+                            
+                            """.trimIndent()
+            )
+
+            answerWhenContains(
+                word("МФЦ"),
+                answer = """
+                    ул. Александры Монаховой д. 23
+                    Телефон:
+                       +7 (495) 777-77-77 
+                    Режим работы:
+                       ПН – ВС  08:00 - 20:00  
+                        
+                    https://yandex.ru/maps/-/CCQtMRGg-D
+                """.trimIndent()
+            )
+
         }
 
     }
