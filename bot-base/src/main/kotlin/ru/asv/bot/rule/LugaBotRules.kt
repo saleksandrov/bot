@@ -225,7 +225,7 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
             )
 
             answerWhenMatches(
-                or(regexp("контакт.*"), word("телефон")),
+                or(regexp("контакт.*"), word("телефон"), word("адрес")),
                 optionalRegexp("отделени.*"),
                 or(regexp("полиц.*"), word("МВД")),
                 optionalRegexp("коммунарк.*"),
@@ -271,7 +271,7 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
             )
 
             answerWhenContains(
-                word("МФЦ"),
+                word("мфц"),
                 answer = """
                     ул. Александры Монаховой д. 23
                     Телефон:
