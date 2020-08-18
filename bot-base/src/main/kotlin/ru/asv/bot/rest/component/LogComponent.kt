@@ -1,8 +1,8 @@
 package ru.asv.bot.rest.component
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Component
 import ru.asv.bot.model.BotRequest
 import java.util.concurrent.ConcurrentHashMap
@@ -26,10 +26,8 @@ class LogComponent {
     }
 
     fun newRequest(request: BotRequest?) {
-        runBlocking {
-            launch(Dispatchers.Default) {
-                logRequest(request)
-            }
+        GlobalScope.launch(Dispatchers.Default) {
+            logRequest(request)
         }
     }
 
