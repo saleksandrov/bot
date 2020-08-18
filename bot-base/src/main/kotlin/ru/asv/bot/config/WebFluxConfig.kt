@@ -1,4 +1,4 @@
-package ru.asv.bmd.base.config
+package ru.asv.bot.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature

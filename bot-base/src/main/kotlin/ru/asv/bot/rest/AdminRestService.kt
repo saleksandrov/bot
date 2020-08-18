@@ -23,7 +23,7 @@ class AdminRestService @Autowired constructor(
     fun getLogData(): Mono<String> {
         return Mono.just("""
             Total requests: ${logRequest.getTotalRequests()} 
-            Last requests: ${logRequest.getLastRequests().map { "${it} \n" }}
+            Last requests: ${logRequest.getLastRequests().map { "$it \n" }}
             Unique requests: ${logRequest.uniqueRequests.size}
             Max count by user: ${logRequest.uniqueRequests.maxByOrNull { e -> e.value }}
         """.trimIndent())

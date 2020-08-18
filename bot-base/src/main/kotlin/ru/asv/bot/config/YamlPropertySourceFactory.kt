@@ -1,4 +1,4 @@
-package ru.asv.bmd.base.config
+package ru.asv.bot.config
 
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean
 import org.springframework.core.env.PropertiesPropertySource

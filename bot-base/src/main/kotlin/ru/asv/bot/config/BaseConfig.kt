@@ -1,7 +1,6 @@
-package ru.asv.bmd.base.config
+package ru.asv.bot.config
 
 import org.springframework.context.annotation.Configuration
 
 @Configuration
-class BaseConfig {
-}
+class BaseConfig

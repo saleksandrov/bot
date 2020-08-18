@@ -52,7 +52,7 @@ class NaiveWordProcessor : WordProcessor {
 
         // try to search  by keywords if no matches
         if (answer == null) {
-            ruleEngine.ac.keyWordAnswers().forEach { patternWordsList, v ->
+            ruleEngine.ac.keyWordAnswers().forEach { (patternWordsList, v) ->
                 var matches = 0
                 questionWords.forEach { questionWord ->
                     patternWordsList.forEach {patternWord ->

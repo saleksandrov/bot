@@ -35,7 +35,7 @@ class MessageRestService @Autowired constructor(
 
     @PostMapping("/sendMessage")
     fun processMessage(@RequestBody request: String) : Mono<ResponseEntity<Any>> {
-        rqLog.info("Received request ${request}")
+        rqLog.info("Received request $request")
 
         var botRequest: BotRequest? = null
         try {
@@ -57,11 +57,11 @@ class MessageRestService @Autowired constructor(
             }
         } catch (ex: Exception) {
             log.error("Error during input request handling", ex)
-            if (botRequest != null) {
+            return if (botRequest != null) {
                 val botResponse = BotResponse("sendMessage", botRequest.chatId, "Не смог прочитать вопрос")
-                return Mono.just(ResponseEntity.ok(botResponse) as ResponseEntity<Any>)
+                Mono.just(ResponseEntity.ok(botResponse) as ResponseEntity<Any>)
             } else {
-                return Mono.just(ResponseEntity.badRequest().body("Error") as ResponseEntity<Any>)
+                Mono.just(ResponseEntity.badRequest().body("Error") as ResponseEntity<Any>)
             }
         }
 
@@ -71,13 +71,12 @@ class MessageRestService @Autowired constructor(
         val gsonBuilder = GsonBuilder()
         gsonBuilder.registerTypeAdapter(BotRequest::class.java, jsonDeserializer())
         val customGson = gsonBuilder.create()
-        val botRequest = customGson.fromJson(request, BotRequest::class.java)
-        return botRequest
+        return customGson.fromJson(request, BotRequest::class.java)
     }
 
     private fun jsonDeserializer(): JsonDeserializer<BotRequest> {
         return JsonDeserializer<BotRequest> { jsonElement: JsonElement, _: Type, _: JsonDeserializationContext ->
-            val jsonObject: JsonObject = jsonElement.getAsJsonObject()
+            val jsonObject: JsonObject = jsonElement.asJsonObject
 
             val messageObject = jsonObject
                 .getAsJsonObject("message")
