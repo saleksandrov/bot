@@ -38,6 +38,11 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                         Данные предоставлены сервисом Яндекс.Погода (https://yandex.ru/pogoda/moscow)
                         """.trimIndent()
                     Mono.just(answer)
+                }.onErrorResume {
+                    Mono.just("""
+                        Сожалеем, но бесплатный ежедневный лимит запросов к сервису Яндекс.Погода превышен. 
+                        Через несколько часов можно будет снова обращатьcя к сервису.
+                    """.trimIndent())
                 }
             }
 
@@ -63,10 +68,25 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                 answer = "Уточните пожалуйста вопрос. Например 'Какай адрес УК?', 'Подскажи контакты УК?'"
             )
 
+            answerWhenMatches(
+                or(word("телефон"), regexp("контакт.*")),
+                word("пик"),
+                answer = """
+                    Главный офис
+                      123242, Россия, г. Москва, ул. Баррикадная, 19 стр. 1
+                      
+                    Телефоны:
+                      +7 (495) 266-19-71 
+                      +7 (495) 308-09-79
+                    E-mail info@pik.ru
+                     
+                """.trimIndent()
+            )
+
             val contacts = """
                     Управляющий Мордовин Кирилл Николаевич.
                     Адрес УК ул. Александры Монаховой д. 94 к. 5. Офис работает по вторникам и четвергам 9:00-18:00.
-                    Телефон УК +7 (800) 505-89-89.
+                    Телефон УК +7 (800) 505-89-89, +7 (495) 123-35-54
                 """.trimIndent()
 
             answerWhenContains(
@@ -90,6 +110,7 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
 
             answerWhenMatches(
                 word("адрес"),
+                optionalRegexp("офис.*"),
                 word("ук"),
                 answer = contacts
             )
@@ -124,9 +145,15 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
             //end contacts
 
             val registerAnswer = """
-                Прописаться можно в офисе заселения по адресу ул. Александры Монаховой д. 98к1 
-                (вторник, четверг c 9.00 - 18.00) +7 (495) 266-93-01
-                или в МФЦ по адресу ул. Александры Монаховой д. 23  
+                Прописаться можно
+                1. (После 31 августа) В офисе УК по адресу ул. Александры Монаховой д. 94 к. 5 
+                Время работы:
+                  ПН, СР с 10:00 - 16:00
+                  Обед с 13:00 - 14:00
+                При себе иметь выписку из ЕГРН, паспорт   
+                
+                2. В МФЦ по адресу ул. Александры Монаховой д. 23  
+                3. Портал гос. услуг http://gosuslugi.ru
             """.trimIndent()
 
             answerWhenMatches(
@@ -146,6 +173,13 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                 word("прописка"),
                 optionalRegexp("луга.*"),
                 answer = registerAnswer
+            )
+
+            answerWhenMatches(
+                or(word("адрес"), regexp("контакт.*")),
+                regexp("офис.*"),
+                regexp("заселен.*"),
+                answer = "ул. Александры Монаховой д. 98к1 (вторник, четверг c 9.00 - 18.00) +7 (495) 266-93-01"
             )
 
             answerWhenMatches(
@@ -201,14 +235,17 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                 regexp("контакт.*"),
                 or(regexp("мастер.*"), regexp("сантехн.*"), regexp("'электри.*"), regexp("рабоч.*")),
                 answer = """
-                            Контакты мастеров
-                            Сантехники 
-                             Андрей +7 967 201-51-63 
-                             Михаил +7 905 518-58-28
+                    Контакты мастеров
+                    Сантехники
+                      Андрей +7 967 201-51-63 
+                      Михаил +7 905 518-58-28
                             
-                            Специалисты по окнам 
-                             Александр +7 910 470-68-25
-                         """.trimIndent()
+                    Специалисты по окнам
+                      Александр +7 910 470-68-25
+                             
+                    Разные виды работ:
+                      Дмитрий +7 910 443-22-80 
+                """.trimIndent()
             )
 
             answerWhenContains(

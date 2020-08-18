@@ -4,6 +4,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Component
+import ru.asv.bot.model.BotRequest
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -13,6 +15,8 @@ class LogComponent {
     private val counter = AtomicInteger(0)
     private val lastRequests = ConcurrentLinkedQueue<String>()
 
+    val uniqueRequests = ConcurrentHashMap<Int, Int>()
+
     fun getTotalRequests() : Int {
         return counter.get()
     }
@@ -21,7 +25,7 @@ class LogComponent {
         return lastRequests.toList()
     }
 
-    fun newRequest(request: String) {
+    fun newRequest(request: BotRequest?) {
         runBlocking {
             launch(Dispatchers.Default) {
                 logRequest(request)
@@ -29,13 +33,17 @@ class LogComponent {
         }
     }
 
-    private suspend fun logRequest(request: String) {
+    private suspend fun logRequest(request: BotRequest?) {
         counter.incrementAndGet()
         if (lastRequests.size > 10) {
             lastRequests.poll()
         }
         lastRequests.offer("Thread=${Thread.currentThread().name} JSON=${request}")
-
+        request?.let {
+            uniqueRequests.compute(request.chatId) {
+                k, v -> v?.inc() ?: 0
+            }
+        }
     }
 
 }

@@ -39,8 +39,8 @@ class MessageRestService @Autowired constructor(
 
         var botRequest: BotRequest? = null
         try {
-            logRequest.newRequest(request)
             botRequest = parseRequest(request)
+            logRequest.newRequest(botRequest)
             rqLog.info("Extracted request data: ${botRequest!!}")
 
             return if (isSystemCommand(botRequest.text)) {
