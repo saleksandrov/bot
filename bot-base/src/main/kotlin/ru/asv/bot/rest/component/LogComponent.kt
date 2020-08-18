@@ -41,7 +41,7 @@ class LogComponent {
         lastRequests.offer("Thread=${Thread.currentThread().name} JSON=${request}")
         request?.let {
             uniqueRequests.compute(request.chatId) {
-                k, v -> v?.inc() ?: 0
+                _, v -> v?.inc() ?: 0
             }
         }
     }
