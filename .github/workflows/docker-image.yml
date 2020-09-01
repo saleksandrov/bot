@@ -40,5 +40,8 @@ jobs:
 
     - name: Push the tagged Docker image
       run: docker push saleksandrov/lugabot-repo:${{ steps.vars.outputs.docker_tag }}
+      
+    - name: Push the latest Docker image
+      run: docker push saleksandrov/lugabot-repo:latest
 
       
