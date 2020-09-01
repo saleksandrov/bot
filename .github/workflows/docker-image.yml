@@ -33,10 +33,10 @@ jobs:
       run: docker build . --file Dockerfile --tag lugabot:${{ steps.vars.outputs.docker_tag }}
 
     - name: Dockerhub tag
-      run: docker tag lugabot:${{ steps.vars.outputs.docker_tag }} lugabot-repo:${{ steps.vars.outputs.docker_tag }}
+      run: docker tag lugabot:${{ steps.vars.outputs.docker_tag }} saleksandrov/lugabot-repo:${{ steps.vars.outputs.docker_tag }}
 
     - name: Latest tag
-      run: docker tag lugabot:${{ steps.vars.outputs.docker_tag }} lugabot-repo:latest
+      run: docker tag lugabot:${{ steps.vars.outputs.docker_tag }} saleksandrov/lugabot-repo:latest
 
     - name: Push the tagged Docker image
       run: docker push saleksandrov/lugabot-repo:${{ steps.vars.outputs.docker_tag }}
