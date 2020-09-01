@@ -152,8 +152,10 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                   Обед с 13:00 - 14:00
                 При себе иметь выписку из ЕГРН, паспорт   
                 
-                2. В МФЦ по адресу ул. Александры Монаховой д. 23  
-                3. Портал гос. услуг http://gosuslugi.ru
+                2. Записаться на портале госуслуг http://gosuslugi.ru или http://mos.ru 
+                   в МВД для регистрации по месту жительства, выбрать МФЦ и прийти по записи.
+                   МФЦ п. Коммунарка находится по адресу ул. Александры Монаховой д. 23  
+                
             """.trimIndent()
 
             answerWhenMatches(
