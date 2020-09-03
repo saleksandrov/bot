@@ -1,4 +1,4 @@
-package ru.asv.bot.text
+package ru.asv.bot.client
 
 import reactor.core.publisher.Mono
 
@@ -9,7 +9,7 @@ class SystemCommandProcessor {
         val aboutAnswer = """
             Чат бот создан для жителей ЖК Бунинские Луга, в его базе есть ответы на частые вопросы.
             Примеры вопросов - 'Подскажи контакты УК', 'Подскажи контакты мастеров', 'Подскажи тарифы', 'Как прописаться в Лугах?', 'Кто управляющий?'.
-            А еще он знает какая погода в ЖК, спросите к примеру 'Какая погода в Лугах?' или просто напишите 'погода'.
+            А еще он знает какая погода в ЖК, спросите к примеру 'Какая погода в Лугах?'.
             
             Чтобы узнать что нового появилось в чатботе введите команду /whatsnew
             
@@ -34,19 +34,3 @@ class SystemCommandProcessor {
 
 }
 
-fun isSystemCommand(command: String): Boolean {
-    if (command.startsWith('/')) {
-        return true
-    }
-    return false
-}
-
-fun execCommand(command: String): Mono<String> {
-    val sp = SystemCommandProcessor()
-    return when (command) {
-        "/start" -> sp.start()
-        "/help" -> sp.help()
-        "/whatsnew" -> sp.new()
-        else -> Mono.just("Неизвестная команда")
-    }
-}

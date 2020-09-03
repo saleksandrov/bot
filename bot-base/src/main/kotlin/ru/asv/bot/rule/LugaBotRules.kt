@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import ru.asv.bot.adapter.WeatherAdapter
-import ru.asv.bot.text.SystemCommandProcessor
+import ru.asv.bot.client.SystemCommandProcessor
 
 @Component
 class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAdapter) : RuleEngine() {

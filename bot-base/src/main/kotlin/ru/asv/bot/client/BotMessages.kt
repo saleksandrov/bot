@@ -1,4 +1,4 @@
-package ru.asv.bot.model
+package ru.asv.bot.client
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

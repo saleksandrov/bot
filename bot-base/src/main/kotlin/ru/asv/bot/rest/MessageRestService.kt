@@ -1,6 +1,5 @@
 package ru.asv.bot.rest
 
-import com.google.gson.*
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -10,15 +9,13 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Mono
-import ru.asv.bot.model.BotRequest
-import ru.asv.bot.model.BotResponse
+import ru.asv.bot.client.BotRequest
+import ru.asv.bot.client.BotRequestProcessor
+import ru.asv.bot.client.BotResponse
 import ru.asv.bot.rest.component.LogComponent
 import ru.asv.bot.rule.RuleEngine
 import ru.asv.bot.text.SentenceProcessor
 import ru.asv.bot.text.WordProcessor
-import ru.asv.bot.text.execCommand
-import ru.asv.bot.text.isSystemCommand
-import java.lang.reflect.Type
 
 @Suppress("UNCHECKED_CAST")
 @RestController
@@ -27,6 +24,7 @@ class MessageRestService @Autowired constructor(
     private val sp: SentenceProcessor,
     private val botRules: RuleEngine,
     private val wp: WordProcessor,
+    private val requestProcessor: BotRequestProcessor,
     private val logRequest: LogComponent
     ) {
 
@@ -39,60 +37,37 @@ class MessageRestService @Autowired constructor(
 
         var botRequest: BotRequest? = null
         try {
-            botRequest = parseRequest(request)
+            botRequest = requestProcessor.parseRequest(request)
             logRequest.newRequest(botRequest)
             rqLog.info("Extracted request data: ${botRequest!!}")
 
-            return if (isSystemCommand(botRequest.text)) {
-                execCommand(botRequest.text).flatMap {
-                    val botResponse = BotResponse("sendMessage", botRequest.chatId, it)
-                    Mono.just(ResponseEntity.ok(botResponse) as ResponseEntity<Any>)
+            return if (requestProcessor.isSystemCommand(botRequest.text)) {
+                requestProcessor.execCommand(botRequest.text).flatMap {
+                    createSuccessResponse(botRequest.chatId, it)
                 }
             } else {
                 wp.determineAnswer(sp.splitToWords(botRequest.text), botRules)
                     .flatMap {
-                        val botResponse = BotResponse("sendMessage", botRequest.chatId, it)
-                        Mono.just(ResponseEntity.ok(botResponse) as ResponseEntity<Any>)
+                        createSuccessResponse(botRequest.chatId, it)
                     }
             }
         } catch (ex: Exception) {
             log.error("Error during input request handling", ex)
             return if (botRequest != null) {
-                val botResponse = BotResponse("sendMessage", botRequest.chatId, "Не смог прочитать вопрос")
-                Mono.just(ResponseEntity.ok(botResponse) as ResponseEntity<Any>)
+                createSuccessResponse(botRequest.chatId, "Не смог прочитать вопрос")
             } else {
-                Mono.just(ResponseEntity.badRequest().body("Error") as ResponseEntity<Any>)
+                createErrorResponse("Error")
             }
         }
 
     }
 
-    private fun parseRequest(request: String): BotRequest? {
-        val gsonBuilder = GsonBuilder()
-        gsonBuilder.registerTypeAdapter(BotRequest::class.java, jsonDeserializer())
-        val customGson = gsonBuilder.create()
-        return customGson.fromJson(request, BotRequest::class.java)
+    private fun createSuccessResponse(chatId: Int, message: String) : Mono<ResponseEntity<Any>> {
+        val botResponse = BotResponse("sendMessage", chatId, message)
+        return Mono.just(ResponseEntity.ok(botResponse) as ResponseEntity<Any>)
     }
 
-    private fun jsonDeserializer(): JsonDeserializer<BotRequest> {
-        return JsonDeserializer<BotRequest> { jsonElement: JsonElement, _: Type, _: JsonDeserializationContext ->
-            val jsonObject: JsonObject = jsonElement.asJsonObject
-
-            val messageObject = jsonObject
-                .getAsJsonObject("message")
-            val chatObject = messageObject
-                .getAsJsonObject("chat")
-
-            BotRequest(
-                chatObject["id"].asInt,
-                if (messageObject.has("text")) {
-                    messageObject["text"].asString
-                } else {
-                    ""
-                }
-            )
-
-        }
-    }
+    private fun createErrorResponse(message: String) =
+        Mono.just(ResponseEntity.badRequest().body(message) as ResponseEntity<Any>)
 
 }
