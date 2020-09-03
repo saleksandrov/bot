@@ -1,5 +1,11 @@
 server:
-  port: ${PORT:8082}
+  port: ${PORT:443}
+  ssl:
+    key-store-type: JKS
+    key-store: ${KEYSTORE_PATH}
+    key-store-password: ${KEYSTORE_PASSWORD}
+    key-alias: bot-luga.ru
+    enabled: true
 
 spring:
   application:
