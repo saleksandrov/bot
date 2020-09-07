@@ -4,7 +4,7 @@ server:
     key-store-type: JKS
     key-store: ${KEYSTORE_PATH}
     key-store-password: ${KEYSTORE_PASSWORD}
-    key-alias: bot-luga.ru
+    key-alias: ${KEY_ALIAS}
     enabled: true
 
 spring:
