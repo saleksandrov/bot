@@ -3,18 +3,21 @@ version: '3.1'
 services:
   bot:
     restart: always
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: bot:v1_0_0
+    image: saleksandrov/lugabot-repo:latest
+    environment:
+      WEATHER_TOKEN: VALUE
+      KEYSTORE_PASSWORD: VALUE
+      KEYSTORE_PATH: /opt/app/jks/bot_long.jks
     volumes:
-      - config-volume:/opt/app/config
+      - jks-volume:/opt/app/jks
+    ports:
+      - "443:443"
 
 volumes:
-  config-volume:
+  jks-volume:
     driver: local
     driver_opts:
       type: none
-      device: '/Users/a17540258/IdeaProjects/bot/docker'
+      device: '/home/bot/luga-bot/jks'
       o: bind
 
