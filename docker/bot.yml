@@ -7,7 +7,8 @@ services:
     environment:
       WEATHER_TOKEN: VALUE
       KEYSTORE_PASSWORD: VALUE
-      KEYSTORE_PATH: /opt/app/jks/bot_long.jks
+      KEYSTORE_PATH: /opt/app/jks/bot_cn.jks
+      KEY_ALIAS: VALUE
     volumes:
       - jks-volume:/opt/app/jks
     ports:

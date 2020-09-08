@@ -142,6 +142,57 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                 optionalRegexp("дом"),
                 answer = contacts
             )
+
+            answerWhenMatches(
+                or(regexp("телефон.*"), regexp("контакт")),
+                regexp("экстренн.*"),
+                regexp("служб.*"),
+                answer = """
+                    Телефон отделения полиции +7 (495) 817-72-02
+                    
+                    Единая служба спасения 112
+                    Пожарная 101 (01)
+                    Полиция 102 (02)    
+                    Скорая 103 (03)
+                    
+                    МОЭСК (диспетчерская) +7 (495) 733-44-44
+                    МЧС "ЛИДЕР" (дежурный) +7 (495) 424-00-33
+                """.trimIndent()
+                        )
+
+            answerWhenMatches(
+                or(regexp("телефон.*"), regexp("контакт")),
+                word("школы"),
+                word("338"),
+                answer = """
+                    Директор:
+                      Андрианова Мария Петровна
+                      AndrianovaMP@edu.mos.ru
+
+                    Телефоны:
+                      +7 (495) 025-65-78
+                      +7 (915) 077-28-52
+
+                    Секретарь:
+                      Рихерт Екатерина Геннадьевна
+
+                    Телефон:
+                      +7 (495) 025-65-78
+
+                    Адрес электронной почты: 338@edu.mos.ru
+                """.trimIndent()
+            )
+
+            answerWhenMatches(
+                or(regexp("телефон.*"), regexp("контакт")),
+                word("охраны"),
+                optionalRegexp("парковк.*"),
+                answer = """
+                    ЧОП Неомакс +7 (916) 790-37-25 
+                    Охрана Парковки +7 (977) 606-39-73
+                """.trimIndent()
+            )
+
             //end contacts
 
             val registerAnswer = """
@@ -241,6 +292,9 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                     Сантехники
                       Андрей +7 967 201-51-63 
                       Михаил +7 905 518-58-28
+                      
+                    Электрики 
+                      Алексей +7 965 438-98-04
                             
                     Специалисты по окнам
                       Александр +7 910 470-68-25

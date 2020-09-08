@@ -25,6 +25,10 @@ class RuleEngineTest {
         //assertTrue { answer("Какая погода в ЖК?").contains("") }
         //assertTrue { answer("Какая погода в бунинских лугах?").contains("") }
         //assertTrue { answer("Какая погода в лугах?").contains("") }
+
+        assertTrue { answer("телефон охраны").startsWith("ЧОП Неомакс")}
+        assertTrue { answer("телефоны экстренных служб").startsWith("Телефон отделения полиции")}
+        assertTrue { answer("телефон школы 338").startsWith("Директор")}
         assertTrue { answer("адрес опорного пункта полиции").contains("ул. Александры Монаховой")}
         assertTrue { answer("контакты почтового отделения").contains("Отделение почтовой связи")}
         assertTrue { answer("контакты почты").contains("Отделение почтовой связи") }
