@@ -51,7 +51,7 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          echo ${{ secrets.BOT_PWD }} | su - bot --password-stdin
+          echo ${{ secrets.BOT_PWD }} | su - bot 
           echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
           cd /home/bot/luga-bot
           docker-compose -f bot.yml pull
