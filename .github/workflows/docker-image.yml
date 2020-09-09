@@ -43,5 +43,18 @@ jobs:
       
     - name: Push the latest Docker image
       run: docker push saleksandrov/lugabot-repo:latest
+    
+    - name: Deploy on hosting
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+          cd /home/bot/luga-bot
+          docker-compose -f bot.yml pull
+          docker-compose -f bot.yml stop
+          docker-compose -f bot.yml up -d
 
       
