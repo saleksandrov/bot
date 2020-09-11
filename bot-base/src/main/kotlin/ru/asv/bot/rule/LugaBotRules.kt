@@ -39,10 +39,12 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                         """.trimIndent()
                     Mono.just(answer)
                 }.onErrorResume {
-                    Mono.just("""
+                    Mono.just(
+                        """
                         Сожалеем, но бесплатный ежедневный лимит запросов к сервису Яндекс.Погода превышен. 
                         Через несколько часов можно будет снова обращатьcя к сервису.
-                    """.trimIndent())
+                    """.trimIndent()
+                    )
                 }
             }
 
@@ -169,7 +171,7 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                     МОЭСК (диспетчерская) +7 (495) 733-44-44
                     МЧС "ЛИДЕР" (дежурный) +7 (495) 424-00-33
                 """.trimIndent()
-                        )
+            )
 
             answerWhenMatches(
                 or(regexp("телефон.*"), regexp("контакт")),
@@ -301,7 +303,7 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
 
             answerWhenMatches(
                 regexp("контакт.*"),
-                or(regexp("мастер.*"), regexp("сантехн.*"), regexp("'электри.*"), regexp("рабоч.*")),
+                or(regexp("мастер.*"), regexp("сантехн.*"), regexp("электри.*"), regexp("рабоч.*")),
                 answer = """
                     Контакты мастеров
                     Сантехники
@@ -357,25 +359,34 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                 answer = "Московский Дмитрий Анатольевич +7 (999) 010-77-12"
             )
 
+            val pochtaAddress = """
+                    Отделение почтовой связи Коммунарка 108801
+                    ул. Липовый Парк, 8, корп. 2
+                    
+                    Телефоны: 
+                        +7 (800) 200-58-88
+                        +7 (800) 100-00-00
+                        +7 (929) 555-45-63
+                    Режим работы:
+                        ПН – ПТ 08:00 - 20:00
+                        СБ      09:00 - 18:00
+                        ВС      Выходной
+                              
+                    https://yandex.ru/maps/-/CCQtMRfhTA
+            """.trimIndent()
+
             answerWhenMatches(
                 or(regexp("контакт.*"), word("адрес")),
                 regexp("почт.*"),
                 optionalRegexp("отделен.*"),
-                answer = """
-                            Отделение почтовой связи Коммунарка 108801
-                            ул. Липовый Парк, 8, корп. 2
-                            Телефоны: 
-                              +7 (800) 200-58-88
-                              +7 (800) 100-00-00
-                              +7 (929) 555-45-63
-                            Режим работы:
-                              ПН – ПТ 08:00 - 20:00
-                              СБ      09:00 - 18:00
-                              ВС      Выходной
-                              
-                            https://yandex.ru/maps/-/CCQtMRfhTA
-                            
-                            """.trimIndent()
+                answer = pochtaAddress
+            )
+
+            answerWhenMatches(
+                or(regexp("контакт.*"), word("адрес")),
+                regexp("отделен.*"),
+                word("почты"),
+                answer = pochtaAddress
             )
 
             answerWhenContains(

@@ -30,9 +30,12 @@ class RuleEngineTest {
         assertTrue { answer("телефоны экстренных служб").startsWith("Телефон отделения полиции")}
         assertTrue { answer("телефон школы 338").startsWith("Директор")}
         assertTrue { answer("адрес опорного пункта полиции").contains("ул. Александры Монаховой")}
+
         assertTrue { answer("контакты почтового отделения").contains("Отделение почтовой связи")}
+        assertTrue { answer("контакты отделения почты").contains("Отделение почтовой связи")}
         assertTrue { answer("контакты почты").contains("Отделение почтовой связи") }
         assertTrue { answer("адрес почты").contains("Отделение почтовой связи") }
+
         assertTrue { answer("контакты отделения полиции").contains("15А, посёлок Коммунарка") }
         assertTrue { answer("мастер слово слово").contains("Уточните пожалуйста вопрос") }
         assertTrue { answer("сантехник слово слово").contains("Уточните пожалуйста вопрос") }
@@ -41,13 +44,13 @@ class RuleEngineTest {
         assertTrue { answer("когда можно шуметь").contains("Можно шуметь") }
         assertTrue { answer("когда можно проводить ремонтные работы").contains("Можно шуметь") }
         assertTrue { answer("когда можно проводить ремонт").contains("Можно шуметь") }
-        assertTrue { answer("управляющий").contains("Управляющий Мордовин Кирилл Николаевич") }
-        assertTrue { answer("контакты управляющего").contains("Управляющий Мордовин Кирилл Николаевич") }
 
-        assertTrue { answer("Какой телефон в УК").contains("Телефон УК") }
-        assertTrue { answer("Какой адрес УК?").contains("Управляющий Мордовин Кирилл Николаевич") }
-        assertTrue { answer("Подскажи контакты УК").contains("Управляющий Мордовин Кирилл Николаевич") }
-        assertTrue { answer("Какое время работы офиса УК").contains("Управляющий Мордовин Кирилл Николаевич") }
+        assertTrue { answer("управляющий").startsWith("Управляющий") }
+        assertTrue { answer("контакты управляющего").startsWith("Управляющий") }
+        assertTrue { answer("Какой телефон в УК").startsWith("Телефон УК") }
+        assertTrue { answer("Какой адрес УК?").startsWith("Управляющий") }
+        assertTrue { answer("Подскажи контакты УК").startsWith("Управляющий") }
+        assertTrue { answer("Какое время работы офиса УК").startsWith("Управляющий") }
 
         assertTrue { answer("прописка").contains("Прописаться можно") }
         assertTrue { answer("Как прописаться в лугах").contains("Прописаться можно") }
@@ -78,6 +81,10 @@ class RuleEngineTest {
 
     }
 
-    fun answer(q: String) = wp.determineAnswer(NaiveSentenceProcessor().splitToWords(q), rules).block()!!
+    fun answer(q: String): String {
+        val answer  = wp.determineAnswer(NaiveSentenceProcessor().splitToWords(q), rules).block()!!
+        //println(answer)
+        return answer
+    }
 
 }
