@@ -156,6 +156,47 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                 answer = contacts
             )
 
+            val medAddress = """
+                   ГБУЗ «Троицкая Городская Больница ДЗМ» 
+                   Колл-центр ТГБ ДЗМ  
+                     +7 (499) 638-34-32
+                   Травмпункт:
+                     +7 (495) 851-02-76
+                   
+                   Поликлиника г. Троицк
+                   г. Москва, г. Троицк, ул. Юбилейная, д. 5
+                   Режим работы:
+                     ПН – ПТ 8.00 - 20.00
+                     (процедурный кабинет с 7.30 - 20.00)
+
+                     
+                   Филиал №2 (Коммунарка)
+                   108814, г. Москва, п. Сосенское, п. Коммунарка, ул. Фитаревская, д. 11
+                   Телефоны:
+                     +7 (495) 817-85-03
+                     +7 (495) 817-83-06
+                    
+                   Филиал №4 (Детская)
+                   108814, г. Москва, пос. Сосенское, п. Коммунарка, ул. Александры Монаховой, д. 96, к. 1  
+                   Режим работы:
+                     ПН – ПТ 8.00 - 20.00
+                     СБ 8.00 - 15.00  
+                   Телефон:
+                     +7 (495) 668-87-51
+                     
+                   https://tgb.mos.ru/                 
+            """.trimIndent()
+
+            answerWhenContains(
+                regexp("поликлиник.*"),
+                answer = medAddress
+            )
+
+            answerWhenContains(
+                regexp("больниц.*"),
+                answer = medAddress
+            )
+
             answerWhenMatches(
                 or(regexp("телефон.*"), regexp("контакт")),
                 regexp("экстренн.*"),
@@ -174,7 +215,7 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
             )
 
             answerWhenMatches(
-                or(regexp("телефон.*"), regexp("контакт")),
+                or(regexp("телефон.*"), regexp("контакт"), word("адрес")),
                 word("школы"),
                 word("338"),
                 answer = """
@@ -210,7 +251,7 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
 
             val registerAnswer = """
                 Прописаться можно
-                1. В офисе УК по адресу ул. Александры Монаховой д. 94 к. 5 
+                1. (Паспортный стол) В офисе УК по адресу ул. Александры Монаховой д. 94 к. 5 
                    Необходимо предварительно записаться по телефону +7 (495) 122-23-76
                    Время работы паспортного стола:
                      ПН 10:00 - 16:00
@@ -219,10 +260,22 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                      Перерыв с 13:00 - 14:00
                    При себе иметь выписку из ЕГРН, паспорт   
                 
-                2. Записаться на портале госуслуг http://gosuslugi.ru или http://mos.ru 
+                2. (МВД) Записаться на портале госуслуг http://gosuslugi.ru или http://mos.ru 
                    в МВД для регистрации по месту жительства, выбрать МФЦ и прийти по записи.
                    
                    МФЦ п. Коммунарка находится по адресу ул. Александры Монаховой д. 23  
+                   
+                   Режим работы МВД в МФЦ:
+                   ПН 09.00 - 18.00
+                   ВТ 11:00 - 20.00
+                   СР 09.00 - 13:00
+                   ЧТ 11.00 - 20.00
+                   ПТ 09.00 - 16.45
+                   1-я и 3-я субботы с 9.00 - 13.00 
+                   после этих суббот понедельник выходной
+                   Обед с 14:00 - 14:45
+                   
+                   Прием ведется на втором этаже
                 
             """.trimIndent()
 
@@ -242,6 +295,20 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
             answerWhenMatches(
                 word("прописка"),
                 optionalRegexp("луга.*"),
+                answer = registerAnswer
+            )
+
+            answerWhenMatches(
+                or(word("время"), word("режим")),
+                word("работы"),
+                word("мвд"),
+                answer = registerAnswer
+            )
+
+            answerWhenMatches(
+                or(word("адрес"), regexp("контакт.*")),
+                regexp("паспортн.*"),
+                regexp("стол.*"),
                 answer = registerAnswer
             )
 
@@ -308,7 +375,7 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
                     Контакты мастеров
                     Сантехники
                       Андрей +7 967 201-51-63 
-                      Михаил +7 905 518-58-28
+                      Михаил (рекомендуют в чате дома 94 к1/к2) +7 905 518-58-28
                       
                     Электрики 
                       Алексей +7 965 438-98-04
@@ -337,7 +404,7 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
             answerWhenMatches(
                 or(regexp("контакт.*"), word("телефон"), word("адрес")),
                 optionalRegexp("отделени.*"),
-                or(regexp("полиц.*"), word("МВД")),
+                or(regexp("полиц.*"), word("мвд")),
                 optionalRegexp("коммунарк.*"),
                 answer = """
                     15А, посёлок Коммунарка 
@@ -356,7 +423,12 @@ class LugaBotRules @Autowired constructor(private val weatherAdapter: WeatherAda
 
             answerWhenContains(
                 regexp("участков.*"),
-                answer = "Московский Дмитрий Анатольевич +7 (999) 010-77-12"
+                answer = "+7 (999) 010-77-46"
+            )
+
+            answerWhenContains(
+                word("мвд"),
+                answer = "Уточните пожалуйста вопрос. Например: 'Подскажи контакты отделения полиции?', 'Подскажи режим работы МВД', 'Как прописаться?' "
             )
 
             val pochtaAddress = """

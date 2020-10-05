@@ -29,7 +29,9 @@ class RuleEngineTest {
         assertTrue { answer("телефон охраны").startsWith("ЧОП Неомакс")}
         assertTrue { answer("телефоны экстренных служб").startsWith("Телефон отделения полиции")}
         assertTrue { answer("телефон школы 338").startsWith("Директор")}
+
         assertTrue { answer("адрес опорного пункта полиции").contains("ул. Александры Монаховой")}
+        assertTrue { answer("контакт участкового").startsWith("+7 (999)")}
 
         assertTrue { answer("контакты почтового отделения").contains("Отделение почтовой связи")}
         assertTrue { answer("контакты отделения почты").contains("Отделение почтовой связи")}
@@ -37,6 +39,11 @@ class RuleEngineTest {
         assertTrue { answer("адрес почты").contains("Отделение почтовой связи") }
 
         assertTrue { answer("контакты отделения полиции").contains("15А, посёлок Коммунарка") }
+        assertTrue { answer("телефон полиции").contains("15А, посёлок Коммунарка") }
+
+        assertTrue { answer("контакты поликлиники к которой прикреплены").startsWith("ГБУЗ «Троицкая Городская Больница ДЗМ»") }
+        assertTrue { answer("контакты районной больницы").startsWith("ГБУЗ «Троицкая Городская Больница ДЗМ»") }
+
         assertTrue { answer("мастер слово слово").contains("Уточните пожалуйста вопрос") }
         assertTrue { answer("сантехник слово слово").contains("Уточните пожалуйста вопрос") }
         assertTrue { answer("Подскажи контакты мастеров").contains("Контакты мастеров") }
@@ -57,6 +64,12 @@ class RuleEngineTest {
         assertTrue { answer("Как прописаться в бунинских лугах").contains("Прописаться можно") }
         assertTrue { answer("Как прописаться?").contains("Прописаться можно") }
         assertTrue { answer("Как прописаться в ЖК?").contains("Прописаться можно") }
+        assertTrue { answer("Подскажи контакты паспортного стола").contains("Прописаться можно") }
+
+        assertTrue { answer("время работы мвд").startsWith( "Прописаться можно") }
+        assertTrue { answer("Подскажи режим работы МВД").startsWith( "Прописаться можно") }
+
+        assertTrue { answer("мвд").startsWith("Уточните") }
 
         assertTrue { answer("квитанция на оплату капитального ремонта кладовой").contains("Для получения квитанции") }
         assertTrue { answer("Как получить квитанцию на оплату кап ремонта кладовой").contains("Для получения квитанции") }
