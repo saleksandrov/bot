@@ -37,6 +37,7 @@ class RuleEngineTest {
         assertTrue { answer("контакты отделения почты").contains("Отделение почтовой связи")}
         assertTrue { answer("контакты почты").contains("Отделение почтовой связи") }
         assertTrue { answer("адрес почты").contains("Отделение почтовой связи") }
+        assertTrue { answer("подскажи адрес почты").contains("Отделение почтовой связи") }
 
         assertTrue { answer("контакты отделения полиции").contains("15А, посёлок Коммунарка") }
         assertTrue { answer("телефон полиции").contains("15А, посёлок Коммунарка") }
